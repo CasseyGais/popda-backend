@@ -16,7 +16,7 @@ type Database struct {
 func Init() *Database {
 	dsn := os.Getenv("DB_DSN")
 	if dsn == "" {
-		dsn = "root:%25Andika12345@tcp(127.0.0.1:3306)/popda_2026?parseTime=true&loc=Local"
+		dsn = "root:@tcp(127.0.0.1:3306)/popda_2026?parseTime=true&loc=Local"
 	}
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{

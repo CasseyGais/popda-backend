@@ -26,7 +26,9 @@ func (h *Handler) Login(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Format request tidak valid",
+			"success": false,
+			"message": "Format request tidak valid",
+			"error":   err.Error(),
 		})
 		return
 	}
@@ -34,10 +36,16 @@ func (h *Handler) Login(c *gin.Context) {
 	response, err := h.service.Login(req.Email, req.Password)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{
-			"error": err.Error(),
+			"success": false,
+			"message": "Login gagal",
+			"error":   err.Error(),
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, response)
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "Login berhasil",
+		"data":    response,
+	})
 }
