@@ -1,8 +1,6 @@
 package masterpelatih
 
-import (
-	"gorm.io/gorm"
-)
+import "gorm.io/gorm"
 
 type Repository struct {
 	DB *gorm.DB
@@ -34,11 +32,18 @@ func (r *Repository) GetByKontingenID(kontingenID uint) ([]MasterPelatih, error)
 }
 
 func (r *Repository) Create(pelatih *MasterPelatih) error {
-	return r.DB.Create(pelatih).Error
+	// Omit updated_at karena tidak ada di tabel
+	return r.DB.Omit("updated_at").Create(pelatih).Error
 }
 
 func (r *Repository) Update(pelatih *MasterPelatih) error {
-	return r.DB.Save(pelatih).Error
+	return r.DB.Model(pelatih).Updates(map[string]interface{}{
+		"kontingen_id": pelatih.KontingenID,
+		"nama":         pelatih.Nama,
+		"no_hp":        pelatih.NoHP,
+		"sertifikat":   pelatih.Sertifikat,
+		"foto":         pelatih.Foto,
+	}).Error
 }
 
 func (r *Repository) Delete(id uint) error {

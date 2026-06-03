@@ -51,7 +51,6 @@ func (s *Service) Create(request *CreateSekolahRequest) (*Sekolah, error) {
 		NPSN:      request.NPSN,
 		Alamat:    request.Alamat,
 		Kabupaten: request.Kabupaten,
-		IsActive:  true,
 	}
 
 	err := s.repository.Create(sekolah)

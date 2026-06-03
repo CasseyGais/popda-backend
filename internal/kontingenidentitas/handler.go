@@ -2,7 +2,9 @@ package kontingenidentitas
 
 import (
 	"net/http"
+	"path/filepath"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -183,20 +185,52 @@ func (h *Handler) UpdateKepalaFoto(c *gin.Context) {
 		return
 	}
 
+	// Coba terima upload file (multipart/form-data)
+	file, fileErr := c.FormFile("foto")
+	if fileErr == nil {
+		filename := strconv.FormatInt(time.Now().UnixNano(), 10) + "_" + file.Filename
+		dst := filepath.Join("uploads", "kepala", filename)
+
+		if err := c.SaveUploadedFile(file, dst); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"success": false,
+				"message": "Gagal menyimpan file foto kepala",
+				"error":   err.Error(),
+			})
+			return
+		}
+
+		fotoPath := "/uploads/kepala/" + filename
+		if err := h.service.UpdateKepalaFoto(uint(id), fotoPath); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"success": false,
+				"message": err.Error(),
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"success": true,
+			"message": "Foto kepala berhasil diupdate",
+			"foto":    fotoPath,
+		})
+		return
+	}
+
+	// Fallback: terima path string via JSON
 	var request struct {
 		Foto string `json:"foto" binding:"required"`
 	}
 	if err := c.ShouldBindJSON(&request); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"success": false,
-			"message": "Format request tidak valid",
+			"message": "Format request tidak valid — kirim file (multipart) atau JSON {\"foto\": \"path\"}",
 			"error":   err.Error(),
 		})
 		return
 	}
 
-	err = h.service.UpdateKepalaFoto(uint(id), request.Foto)
-	if err != nil {
+	if err := h.service.UpdateKepalaFoto(uint(id), request.Foto); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"success": false,
 			"message": err.Error(),
@@ -207,6 +241,7 @@ func (h *Handler) UpdateKepalaFoto(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
 		"message": "Foto kepala berhasil diupdate",
+		"foto":    request.Foto,
 	})
 }
 
@@ -220,20 +255,52 @@ func (h *Handler) UpdatePICFoto(c *gin.Context) {
 		return
 	}
 
+	// Coba terima upload file (multipart/form-data)
+	file, fileErr := c.FormFile("foto")
+	if fileErr == nil {
+		filename := strconv.FormatInt(time.Now().UnixNano(), 10) + "_" + file.Filename
+		dst := filepath.Join("uploads", "pic", filename)
+
+		if err := c.SaveUploadedFile(file, dst); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"success": false,
+				"message": "Gagal menyimpan file foto PIC",
+				"error":   err.Error(),
+			})
+			return
+		}
+
+		fotoPath := "/uploads/pic/" + filename
+		if err := h.service.UpdatePICFoto(uint(id), fotoPath); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"success": false,
+				"message": err.Error(),
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"success": true,
+			"message": "Foto PIC berhasil diupdate",
+			"foto":    fotoPath,
+		})
+		return
+	}
+
+	// Fallback: terima path string via JSON
 	var request struct {
 		Foto string `json:"foto" binding:"required"`
 	}
 	if err := c.ShouldBindJSON(&request); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"success": false,
-			"message": "Format request tidak valid",
+			"message": "Format request tidak valid — kirim file (multipart) atau JSON {\"foto\": \"path\"}",
 			"error":   err.Error(),
 		})
 		return
 	}
 
-	err = h.service.UpdatePICFoto(uint(id), request.Foto)
-	if err != nil {
+	if err := h.service.UpdatePICFoto(uint(id), request.Foto); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"success": false,
 			"message": err.Error(),
@@ -244,5 +311,6 @@ func (h *Handler) UpdatePICFoto(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
 		"message": "Foto PIC berhasil diupdate",
+		"foto":    request.Foto,
 	})
 }

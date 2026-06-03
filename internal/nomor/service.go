@@ -30,9 +30,11 @@ func (s *Service) GetByCaborID(caborID uint) ([]Nomor, error) {
 
 func (s *Service) Create(request *CreateNomorRequest) (*Nomor, error) {
 	nomor := &Nomor{
-		Nama:     request.Nama,
-		CaborID:  request.CaborID,
-		IsActive: true,
+		Nama:         request.Nama,
+		CaborID:      request.CaborID,
+		JenisKelamin: request.JenisKelamin,
+		Tipe:         request.Tipe,
+		IsActive:     true,
 	}
 
 	err := s.repository.Create(nomor)
@@ -55,6 +57,12 @@ func (s *Service) Update(id uint, request *UpdateNomorRequest) (*Nomor, error) {
 	if request.CaborID != 0 {
 		nomor.CaborID = request.CaborID
 	}
+	if request.JenisKelamin != "" {
+		nomor.JenisKelamin = request.JenisKelamin
+	}
+	if request.Tipe != "" {
+		nomor.Tipe = request.Tipe
+	}
 
 	err = s.repository.Update(nomor)
 	if err != nil {
@@ -73,11 +81,15 @@ func (s *Service) Delete(id uint) error {
 }
 
 type CreateNomorRequest struct {
-	Nama    string `json:"nama" binding:"required"`
-	CaborID uint   `json:"cabor_id" binding:"required"`
+	Nama         string `json:"nama" binding:"required"`
+	CaborID      uint   `json:"cabor_id" binding:"required"`
+	JenisKelamin string `json:"jenis_kelamin" binding:"required,oneof=PUTRA PUTRI CAMPURAN"`
+	Tipe         string `json:"tipe" binding:"required,oneof=INDIVIDU BEREGU"`
 }
 
 type UpdateNomorRequest struct {
-	Nama    string `json:"nama"`
-	CaborID uint   `json:"cabor_id"`
+	Nama         string `json:"nama"`
+	CaborID      uint   `json:"cabor_id"`
+	JenisKelamin string `json:"jenis_kelamin" binding:"omitempty,oneof=PUTRA PUTRI CAMPURAN"`
+	Tipe         string `json:"tipe" binding:"omitempty,oneof=INDIVIDU BEREGU"`
 }

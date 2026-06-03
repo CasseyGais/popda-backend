@@ -3,13 +3,14 @@ package auth
 import "time"
 
 type User struct {
-	ID        uint      `json:"id" gorm:"primaryKey"`
-	Name      string    `json:"name" gorm:"not null"`
-	Email     string    `json:"email" gorm:"uniqueIndex;not null"`
-	Password  string    `json:"-" gorm:"not null"`
-	Avatar    string    `json:"avatar"`
-	IsActive  bool      `json:"is_active" gorm:"default:true"`
-	CreatedAt time.Time `json:"created_at"`
+	ID          uint        `json:"id" gorm:"primaryKey"`
+	Name        string      `json:"name" gorm:"not null"`
+	Email       string      `json:"email" gorm:"uniqueIndex;not null"`
+	Password    string      `json:"-" gorm:"not null"`
+	Avatar      string      `json:"avatar"`
+	IsActive    bool        `json:"is_active" gorm:"default:true"`
+	CreatedAt   time.Time   `json:"created_at"`
+	Territories []Territory `json:"territories,omitempty" gorm:"-"`
 }
 
 type UserRole struct {

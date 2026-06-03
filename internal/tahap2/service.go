@@ -10,55 +10,112 @@ func NewService(repo *Repository) *Service {
 	return &Service{repo: repo}
 }
 
-func (s *Service) GetData(kontingenID uint) (*Response, error) {
+// GetKontingenIDByTerritory untuk superadmin resolve territory → kontingen
+func (s *Service) GetKontingenIDByTerritory(territoryID uint) (uint, error) {
+	return s.repo.GetKontingenIDByTerritory(territoryID)
+}
 
-	submitted, submittedAt, err := s.repo.GetMeta(kontingenID)
+// GetData ambil status tahap2 + daftar nomor dari cabor yang dipilih di tahap 1,
+// beserta status terdaftar/tidak per nomor
+func (s *Service) GetData(kontingenID uint) (map[string]interface{}, error) {
+	kontingen, err := s.repo.GetKontingen(kontingenID)
+	if err != nil {
+		return nil, errors.New("kontingen tidak ditemukan")
+	}
+
+	// Cek tahap 1 sudah submit
+	if kontingen.Tahap1Status != "SUBMITTED" {
+		return nil, errors.New("tahap 1 belum disubmit")
+	}
+
+	nomorList, err := s.repo.GetNomorByCabor(kontingenID)
 	if err != nil {
 		return nil, err
 	}
 
-	events, err := s.repo.GetEventsWithStatus(kontingenID)
-	if err != nil {
-		return nil, err
-	}
-
-	return &Response{
-		Tahap2Submitted: submitted,
-		SubmittedAt:     submittedAt,
-		Events:          events,
+	return map[string]interface{}{
+		"tahap2_status":       kontingen.Tahap2Status,
+		"tahap2_submitted_at": kontingen.Tahap2SubmittedAt,
+		"nomor_list":          nomorList,
 	}, nil
 }
 
-func (s *Service) Update(kontingenID uint, nomorIDs []uint) error {
-	return s.repo.SaveSelectedEvents(kontingenID, nomorIDs)
+// DaftarNomor tambah satu nomor ke pendaftaran kontingen
+func (s *Service) DaftarNomor(kontingenID, nomorID uint) error {
+	kontingen, err := s.repo.GetKontingen(kontingenID)
+	if err != nil {
+		return errors.New("kontingen tidak ditemukan")
+	}
+	if kontingen.Tahap2Status == "SUBMITTED" {
+		return errors.New("tahap 2 sudah disubmit, tidak dapat diubah")
+	}
+
+	// Validasi: nomor harus dari cabor yang dipilih di tahap 1
+	valid, err := s.repo.IsNomorDariCaborKontingen(kontingenID, nomorID)
+	if err != nil {
+		return err
+	}
+	if !valid {
+		return errors.New("nomor tidak termasuk dalam cabor yang didaftarkan di tahap 1")
+	}
+
+	return s.repo.DaftarNomor(kontingenID, nomorID)
 }
 
+// BatalNomor hapus satu nomor dari pendaftaran
+func (s *Service) BatalNomor(kontingenID, nomorID uint) error {
+	kontingen, err := s.repo.GetKontingen(kontingenID)
+	if err != nil {
+		return errors.New("kontingen tidak ditemukan")
+	}
+	if kontingen.Tahap2Status == "SUBMITTED" {
+		return errors.New("tahap 2 sudah disubmit, tidak dapat diubah")
+	}
+
+	return s.repo.BatalNomor(kontingenID, nomorID)
+}
+
+// Submit kunci tahap 2 — ubah tahap2_status ke SUBMITTED di tabel kontingen
 func (s *Service) Submit(kontingenID uint) error {
+	kontingen, err := s.repo.GetKontingen(kontingenID)
+	if err != nil {
+		return errors.New("kontingen tidak ditemukan")
+	}
+	if kontingen.Tahap2Status == "SUBMITTED" {
+		return errors.New("tahap 2 sudah disubmit")
+	}
 
-	submitted, _, err := s.repo.GetMeta(kontingenID)
+	// Pastikan minimal ada satu nomor yang dipilih
+	terdaftar, err := s.repo.GetTerdaftar(kontingenID)
 	if err != nil {
 		return err
 	}
-
-	if submitted {
-		return errors.New("Tahap 2 sudah disubmit")
+	if len(terdaftar) == 0 {
+		return errors.New("pilih minimal satu nomor pertandingan sebelum submit")
 	}
 
-	events, err := s.repo.GetEventsWithStatus(kontingenID)
+	return s.repo.SetTahap2Submitted(kontingenID)
+}
+
+// GetExportData menyiapkan data lengkap untuk export PDF/Excel tahap 2
+func (s *Service) GetExportData(kontingenID uint) (*ExportData, error) {
+	kontingen, err := s.repo.GetKontingen(kontingenID)
 	if err != nil {
-		return err
+		return nil, errors.New("kontingen tidak ditemukan")
 	}
 
-	count := 0
-	for _, e := range events {
-		if e.Ikut {
-			count++
-		}
+	// Syarat export: tahap 1 harus SUBMITTED
+	if kontingen.Tahap1Status != "SUBMITTED" {
+		return nil, errors.New("tahap 1 belum disubmit")
 	}
 
-	if count == 0 {
-		return errors.New("minimal 1 event harus dicentang")
+	rows, err := s.repo.GetNomorTerdaftarForExport(kontingenID)
+	if err != nil {
+		return nil, err
 	}
 
-	return s.repo.SetSubmitted(kontingenID)
+	return &ExportData{
+		Kontingen: kontingen,
+		NomorList: rows,
+	}, nil
 }

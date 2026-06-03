@@ -1,8 +1,6 @@
 package masterofficial
 
-import (
-	"gorm.io/gorm"
-)
+import "gorm.io/gorm"
 
 type Repository struct {
 	DB *gorm.DB
@@ -34,11 +32,17 @@ func (r *Repository) GetByKontingenID(kontingenID uint) ([]MasterOfficial, error
 }
 
 func (r *Repository) Create(official *MasterOfficial) error {
-	return r.DB.Create(official).Error
+	// Omit updated_at karena tidak ada di tabel
+	return r.DB.Omit("updated_at").Create(official).Error
 }
 
 func (r *Repository) Update(official *MasterOfficial) error {
-	return r.DB.Save(official).Error
+	return r.DB.Model(official).Updates(map[string]interface{}{
+		"kontingen_id": official.KontingenID,
+		"nama":         official.Nama,
+		"jabatan":      official.Jabatan,
+		"no_hp":        official.NoHP,
+	}).Error
 }
 
 func (r *Repository) Delete(id uint) error {

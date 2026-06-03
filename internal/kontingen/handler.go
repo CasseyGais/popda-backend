@@ -32,16 +32,28 @@ func (h *Handler) GetIdentitas(c *gin.Context) {
 
 	data, err := h.service.GetIdentitas(kontingenID)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "Gagal mengambil data identitas",
+			"error":   err.Error(),
+		})
 		return
 	}
 
 	if data == nil {
-		c.JSON(http.StatusOK, gin.H{"data": gin.H{}})
+		c.JSON(http.StatusOK, gin.H{
+			"success": true,
+			"message": "Data identitas kosong",
+			"data":    gin.H{},
+		})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": data})
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "Data identitas berhasil diambil",
+		"data":    data,
+	})
 }
 
 // ================= UPDATE =================
@@ -58,8 +70,8 @@ func (h *Handler) Update(c *gin.Context) {
 	input := IdentitasKontingen{
 		// ===== INSTANSI =====
 		Alamat:        c.PostForm("alamat"),
-		EmailInstansi: c.PostForm("emailInstansi"),
-		PhoneInstansi: c.PostForm("phoneInstansi"),
+		EmailInstansi: c.PostForm("email_instansi"),
+		PhoneInstansi: c.PostForm("phone_instansi"),
 
 		// ===== KEPALA  =====
 		KepalaNama:    c.PostForm("kepala_nama"),
@@ -94,13 +106,18 @@ func (h *Handler) Update(c *gin.Context) {
 	}
 
 	if err := h.service.UpdateIdentitas(kontingenID, &input); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "Gagal mengupdate data identitas",
+			"error":   err.Error(),
+		})
 		return
 	}
 
 	updated, _ := h.service.GetIdentitas(kontingenID)
 
 	c.JSON(http.StatusOK, gin.H{
+		"success": true,
 		"message": "Identitas kontingen berhasil diperbarui",
 		"data":    updated,
 	})

@@ -75,41 +75,34 @@ func (r *Repository) GetUserRole(userID uint) (string, error) {
 // ================= GET KONTINGEN ID =================
 
 // Alur:
-
-// users
-
-// → user_territories
-
-// → territories
-
-// → kontingen
+// users → user_territories → territories → kontingen
+// Jika kontingen belum ada untuk territory user, kembalikan 0 (bukan error)
+// agar login tetap bisa berjalan
 
 func (r *Repository) GetKontingenIDByUser(userID uint) (uint, error) {
 
-	var kontingenID uint
+	// Gunakan *uint agar GORM bisa scan NULL dari LEFT JOIN tanpa error
+	var kontingenID *uint
 
 	err := r.db.
 		Table("user_territories ut").
 		Select("k.id").
 		Joins("JOIN territories t ON t.id = ut.territory_id").
-		Joins("JOIN kontingen k ON k.territory_id = t.id").
+		Joins("LEFT JOIN kontingen k ON k.territory_id = t.id").
 		Where("ut.user_id = ?", userID).
 		Limit(1).
 		Scan(&kontingenID).Error
 
 	if err != nil {
-
 		return 0, err
-
 	}
 
-	if kontingenID == 0 {
-
-		return 0, errors.New("kontingen tidak ditemukan untuk user ini")
-
+	// NULL (superadmin / user tanpa kontingen) → return 0, login tetap jalan
+	if kontingenID == nil {
+		return 0, nil
 	}
 
-	return kontingenID, nil
+	return *kontingenID, nil
 
 }
 
@@ -137,6 +130,23 @@ func (r *Repository) GetTerritoryNameByUser(userID uint) (string, error) {
 
 	return territoryName, nil
 
+}
+
+func (r *Repository) GetTerritoriesByUser(userID uint) ([]Territory, error) {
+	var territories []Territory
+
+	err := r.db.
+		Table("user_territories ut").
+		Select("t.id, t.name, t.type").
+		Joins("JOIN territories t ON t.id = ut.territory_id").
+		Where("ut.user_id = ?", userID).
+		Scan(&territories).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return territories, nil
 }
 
 // ================= DEBUG METHODS =================

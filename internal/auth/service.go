@@ -41,9 +41,8 @@ func (s *Service) Login(identifier, password string) (*LoginResponse, error) {
 	user, err := s.repo.FindByEmail(identifier)
 
 	if err != nil {
-
-		return nil, err
-
+		// Jangan bocorkan apakah email ditemukan atau tidak
+		return nil, errors.New("Email atau password anda salah")
 	}
 
 	if !user.IsActive {
@@ -53,8 +52,8 @@ func (s *Service) Login(identifier, password string) (*LoginResponse, error) {
 	}
 
 	if user.Password != hashPassword(password) {
-
-		return nil, errors.New("password salah")
+		// Pesan sama untuk email tidak ditemukan vs password salah
+		return nil, errors.New("Email atau password anda salah")
 
 	}
 
@@ -82,6 +81,14 @@ func (s *Service) Login(identifier, password string) (*LoginResponse, error) {
 
 	}
 
+	userTerritories, err := s.repo.GetTerritoriesByUser(user.ID)
+
+	if err != nil {
+
+		return nil, err
+
+	}
+
 	token, err := jwt.GenerateFullToken(
 
 		user.ID,
@@ -94,7 +101,7 @@ func (s *Service) Login(identifier, password string) (*LoginResponse, error) {
 
 		user.Name,
 
-		territoryName, // Gunakan nama territory dari database
+		territoryName,
 
 		user.Avatar,
 	)
@@ -107,6 +114,8 @@ func (s *Service) Login(identifier, password string) (*LoginResponse, error) {
 
 	user.Password = "" // jangan pernah kirim password
 
+	user.Territories = userTerritories
+
 	return &LoginResponse{
 
 		Token: token,
@@ -116,4 +125,10 @@ func (s *Service) Login(identifier, password string) (*LoginResponse, error) {
 		Role: userRole,
 	}, nil
 
+}
+
+func (s *Service) Logout(userID interface{}) error {
+	// For stateless JWT, logout is handled client-side by deleting the token
+	// This method can be extended to implement token blacklisting if needed
+	return nil
 }

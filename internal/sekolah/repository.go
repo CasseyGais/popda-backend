@@ -1,8 +1,6 @@
 package sekolah
 
-import (
-	"gorm.io/gorm"
-)
+import "gorm.io/gorm"
 
 type Repository struct {
 	DB *gorm.DB
@@ -14,7 +12,7 @@ func NewRepository(db *gorm.DB) *Repository {
 
 func (r *Repository) GetAll() ([]Sekolah, error) {
 	var sekolahs []Sekolah
-	err := r.DB.Where("is_active = ?", true).Find(&sekolahs).Error
+	err := r.DB.Find(&sekolahs).Error
 	return sekolahs, err
 }
 
@@ -29,7 +27,7 @@ func (r *Repository) GetByID(id uint) (*Sekolah, error) {
 
 func (r *Repository) GetByNPSN(npsn string) (*Sekolah, error) {
 	var sekolah Sekolah
-	err := r.DB.Where("npsn = ? AND is_active = ?", npsn, true).First(&sekolah).Error
+	err := r.DB.Where("npsn = ?", npsn).First(&sekolah).Error
 	if err != nil {
 		return nil, err
 	}
@@ -38,23 +36,25 @@ func (r *Repository) GetByNPSN(npsn string) (*Sekolah, error) {
 
 func (r *Repository) Search(keyword string) ([]Sekolah, error) {
 	var sekolahs []Sekolah
-	err := r.DB.Where("is_active = ? AND (nama LIKE ? OR npsn LIKE ? OR kabupaten LIKE ?)", 
-		true, "%"+keyword+"%", "%"+keyword+"%", "%"+keyword+"%").Find(&sekolahs).Error
+	err := r.DB.Where("nama LIKE ? OR npsn LIKE ? OR kabupaten LIKE ?",
+		"%"+keyword+"%", "%"+keyword+"%", "%"+keyword+"%").Find(&sekolahs).Error
 	return sekolahs, err
 }
 
 func (r *Repository) Create(sekolah *Sekolah) error {
-	return r.DB.Create(sekolah).Error
+	// Omit updated_at dan is_active karena tidak ada di tabel
+	return r.DB.Omit("updated_at", "is_active").Create(sekolah).Error
 }
 
 func (r *Repository) Update(sekolah *Sekolah) error {
-	return r.DB.Save(sekolah).Error
+	return r.DB.Model(sekolah).Updates(map[string]interface{}{
+		"nama":      sekolah.Name,
+		"npsn":      sekolah.NPSN,
+		"alamat":    sekolah.Alamat,
+		"kabupaten": sekolah.Kabupaten,
+	}).Error
 }
 
 func (r *Repository) Delete(id uint) error {
-	return r.DB.Model(&Sekolah{}).Where("id = ?", id).Update("is_active", false).Error
-}
-
-func (r *Repository) HardDelete(id uint) error {
 	return r.DB.Delete(&Sekolah{}, id).Error
 }

@@ -1,8 +1,6 @@
 package nomor
 
-import (
-	"gorm.io/gorm"
-)
+import "gorm.io/gorm"
 
 type Repository struct {
 	DB *gorm.DB
@@ -14,6 +12,7 @@ func NewRepository(db *gorm.DB) *Repository {
 
 func (r *Repository) GetAll() ([]Nomor, error) {
 	var nomors []Nomor
+	// Ambil semua nomor aktif
 	err := r.DB.Preload("Cabor").Where("is_active = ?", true).Find(&nomors).Error
 	return nomors, err
 }
@@ -34,15 +33,23 @@ func (r *Repository) GetByCaborID(caborID uint) ([]Nomor, error) {
 }
 
 func (r *Repository) Create(nomor *Nomor) error {
-	return r.DB.Create(nomor).Error
+	// Omit updated_at karena kolom tidak ada di tabel
+	return r.DB.Omit("updated_at").Create(nomor).Error
 }
 
 func (r *Repository) Update(nomor *Nomor) error {
-	return r.DB.Save(nomor).Error
+	return r.DB.Model(nomor).Updates(map[string]interface{}{
+		"cabor_id":      nomor.CaborID,
+		"nama":          nomor.Nama,
+		"jenis_kelamin": nomor.JenisKelamin,
+		"tipe":          nomor.Tipe,
+		"is_active":     nomor.IsActive,
+	}).Error
 }
 
 func (r *Repository) Delete(id uint) error {
-	return r.DB.Model(&Nomor{}).Where("id = ?", id).Update("is_active", false).Error
+	// Hard delete — hapus permanen dari DB
+	return r.DB.Delete(&Nomor{}, id).Error
 }
 
 func (r *Repository) HardDelete(id uint) error {

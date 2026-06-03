@@ -1,8 +1,6 @@
 package roles
 
-import (
-	"gorm.io/gorm"
-)
+import "gorm.io/gorm"
 
 type Repository struct {
 	DB *gorm.DB
@@ -41,7 +39,11 @@ func (r *Repository) Create(role *Role) error {
 }
 
 func (r *Repository) Update(role *Role) error {
-	return r.DB.Save(role).Error
+	// Tabel roles tidak punya created_at/updated_at, pakai Updates dengan map
+	return r.DB.Model(role).Updates(map[string]interface{}{
+		"name":        role.Name,
+		"description": role.Description,
+	}).Error
 }
 
 func (r *Repository) Delete(id uint) error {

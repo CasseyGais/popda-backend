@@ -130,16 +130,28 @@ func (r *Repository) CreateKontingen(kontingen *Kontingen) error {
 }
 
 func (r *Repository) UpdateKontingen(id uint, kontingen *Kontingen) error {
+	updates := map[string]interface{}{
+		"territory_id":   kontingen.TerritoryID,
+		"nama_kontingen": kontingen.NamaKontingen,
+		"updated_at":     gorm.Expr("NOW()"),
+	}
+
+	// Hanya update status jika nilainya valid (DRAFT atau SUBMITTED)
+	if kontingen.Tahap1Status == TahapStatusDraft || kontingen.Tahap1Status == TahapStatusSubmitted {
+		updates["tahap1_status"] = kontingen.Tahap1Status
+	}
+	if kontingen.Tahap1Submitted != nil {
+		updates["tahap1_submitted_at"] = kontingen.Tahap1Submitted
+	}
+	if kontingen.Tahap2Status == TahapStatusDraft || kontingen.Tahap2Status == TahapStatusSubmitted {
+		updates["tahap2_status"] = kontingen.Tahap2Status
+	}
+	if kontingen.Tahap2Submitted != nil {
+		updates["tahap2_submitted_at"] = kontingen.Tahap2Submitted
+	}
+
 	return r.db.
 		Model(&Kontingen{}).
 		Where("id = ?", id).
-		Updates(map[string]interface{}{
-			"territory_id":        kontingen.TerritoryID,
-			"nama_kontingen":      kontingen.NamaKontingen,
-			"tahap1_status":       kontingen.Tahap1Status,
-			"tahap1_submitted_at": kontingen.Tahap1Submitted,
-			"tahap2_status":       kontingen.Tahap2Status,
-			"tahap2_submitted_at": kontingen.Tahap2Submitted,
-			"updated_at":          gorm.Expr("NOW()"),
-		}).Error
+		Updates(updates).Error
 }

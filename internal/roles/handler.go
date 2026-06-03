@@ -175,7 +175,7 @@ func (h *Handler) Delete(c *gin.Context) {
 }
 
 func (h *Handler) AssignPermission(c *gin.Context) {
-	roleID, err := strconv.ParseUint(c.Param("role_id"), 10, 32)
+	roleID, err := strconv.ParseUint(c.Param("id"), 10, 32)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"success": false,
@@ -210,7 +210,7 @@ func (h *Handler) AssignPermission(c *gin.Context) {
 }
 
 func (h *Handler) RemovePermission(c *gin.Context) {
-	roleID, err := strconv.ParseUint(c.Param("role_id"), 10, 32)
+	roleID, err := strconv.ParseUint(c.Param("id"), 10, 32)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"success": false,
@@ -245,7 +245,7 @@ func (h *Handler) RemovePermission(c *gin.Context) {
 }
 
 func (h *Handler) GetPermissions(c *gin.Context) {
-	roleID, err := strconv.ParseUint(c.Param("role_id"), 10, 32)
+	roleID, err := strconv.ParseUint(c.Param("id"), 10, 32)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"success": false,

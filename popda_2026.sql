@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 08 Mar 2026 pada 06.07
+-- Waktu pembuatan: 02 Jun 2026 pada 20.26
 -- Versi server: 10.4.32-MariaDB
 -- Versi PHP: 8.2.12
 
@@ -44,7 +44,14 @@ CREATE TABLE `kontingen` (
 --
 
 INSERT INTO `kontingen` (`id`, `territory_id`, `nama_kontingen`, `tahap1_status`, `tahap1_submitted_at`, `tahap2_status`, `tahap2_submitted_at`, `created_at`, `updated_at`) VALUES
-(2, 2, 'Kontingen 2', '', NULL, '', NULL, '2026-02-13 04:33:26', '2026-02-13 04:33:26');
+(2, 2, 'Kontingen 2', '', NULL, '', NULL, '2026-02-13 04:33:26', '2026-02-13 04:33:26'),
+(3, 3, 'Kontingen 3', 'SUBMITTED', '2026-06-02 14:54:34', 'SUBMITTED', '2026-06-02 17:09:46', '2026-05-24 15:05:08', '2026-06-02 10:09:46'),
+(4, 4, 'Kontingen 4', 'SUBMITTED', '2026-06-02 15:15:42', 'DRAFT', NULL, '2026-05-24 15:05:08', '2026-06-02 08:15:42'),
+(5, 5, 'Kontingen 5', 'DRAFT', NULL, 'DRAFT', NULL, '2026-05-24 15:05:08', '2026-05-24 15:05:08'),
+(6, 6, 'Kontingen 6', 'DRAFT', NULL, 'DRAFT', NULL, '2026-05-24 15:05:08', '2026-05-24 15:05:08'),
+(7, 7, 'Kontingen 7', 'DRAFT', NULL, 'DRAFT', NULL, '2026-05-24 15:05:08', '2026-05-24 15:05:08'),
+(8, 8, 'Kontingen 8', 'DRAFT', NULL, 'DRAFT', NULL, '2026-05-24 15:05:08', '2026-05-24 15:05:08'),
+(9, 9, 'Kontingen 9', 'DRAFT', NULL, 'DRAFT', NULL, '2026-05-24 15:05:08', '2026-05-24 15:05:08');
 
 -- --------------------------------------------------------
 
@@ -75,7 +82,14 @@ CREATE TABLE `kontingen_identitas` (
 --
 
 INSERT INTO `kontingen_identitas` (`id`, `kontingen_id`, `kepala_nama`, `kepala_jabatan`, `kepala_nip`, `kepala_telepon`, `kepala_foto`, `pic_nama`, `pic_jabatan`, `pic_telepon`, `pic_foto`, `alamat`, `email_instansi`, `phone_instansi`, `updated_at`) VALUES
-(14, 2, 'Bejo Sutisna', 'Ketua Kontingen', '1234567890', '+628979819142', '/uploads/kepala/20260213115553_gambar 1.PNG', '', '', '', '', '', 'casseyvienyard@gmail.com', '+628979819142', '2026-02-13 04:55:53');
+(14, 2, 'Rudi Hartono', 'Ketua Kontingen', '1987654321', '+628111111111', '/uploads/kepala/20260524221236_64Dxs.jpg', 'Andi Saputra', 'Operator', '+628111111112', '/uploads/pic/1780009950206718400_ChatGPT Image 28 Mei 2026, 20.06.11.png', 'Kabupaten Serang', 'kontingen3@popda.id', '+628111111113', '2026-05-28 23:12:30'),
+(15, 3, 'Rudi Hartono', 'Ketua Kontingen', '1987654321', '+628111111111', '/uploads/kepala/1780009974708474800_WhatsApp Image 2026-05-28 at 19.52.42.jpeg', 'Andi Saputra', 'Operator', '+628111111112', '/uploads/pic/1780009974807541600_ChatGPT Image 28 Mei 2026, 20.06.11.png', 'Kabupaten Serang', 'kontingen3@popda.id', '+628111111113', '2026-05-28 23:12:54'),
+(16, 4, 'Dedi Supriadi', 'Ketua Kontingen', '1987654322', '+628222222221', '/uploads/kepala/kepala4.jpg', 'Fajar Nugraha', 'Admin', '+628222222222', '/uploads/pic/pic4.jpg', 'Kota Cilegon', 'kontingen4@popda.id', '+628222222223', '2026-05-24 15:09:52'),
+(17, 5, 'Agus Setiawan', 'Ketua Kontingen', '1987654323', '+628333333331', '/uploads/kepala/kepala5.jpg', 'Beni Firmansyah', 'Operator', '+628333333332', '/uploads/pic/pic5.jpg', 'Kota Tangerang', 'kontingen5@popda.id', '+628333333333', '2026-05-24 15:09:52'),
+(18, 6, 'Yusuf Maulana', 'Ketua Kontingen', '1987654324', '+628444444441', '/uploads/kepala/kepala6.jpg', 'Rizki Hidayat', 'Admin', '+628444444442', '/uploads/pic/pic6.jpg', 'Kabupaten Pandeglang', 'kontingen6@popda.id', '+628444444443', '2026-05-24 15:09:52'),
+(19, 7, 'Maman Abdurahman', 'Ketua Kontingen', '1987654325', '+628555555551', '/uploads/kepala/kepala7.jpg', 'Ilham Ramadhan', 'Operator', '+628555555552', '/uploads/pic/pic7.jpg', 'Kabupaten Lebak', 'kontingen7@popda.id', '+628555555553', '2026-05-24 15:09:52'),
+(20, 8, 'Rahmat Hidayat', 'Ketua Kontingen', '1987654326', '+628666666661', '/uploads/kepala/kepala8.jpg', 'Galih Pratama', 'Admin', '+628666666662', '/uploads/pic/pic8.jpg', 'Kota Serang', 'kontingen8@popda.id', '+628666666663', '2026-05-24 15:09:52'),
+(21, 9, 'Asep Kurniawan', 'Ketua Kontingen', '1987654327', '+628777777771', '/uploads/kepala/kepala9.jpg', 'Dimas Saputra', 'Operator', '+628777777772', '/uploads/pic/pic9.jpg', 'Kabupaten Tangerang', 'kontingen9@popda.id', '+628777777773', '2026-05-24 15:09:52');
 
 -- --------------------------------------------------------
 
@@ -86,16 +100,27 @@ INSERT INTO `kontingen_identitas` (`id`, `kontingen_id`, `kepala_nama`, `kepala_
 CREATE TABLE `master_atlet` (
   `id` bigint(20) NOT NULL,
   `kontingen_id` bigint(20) NOT NULL,
-  `sekolah_id` bigint(20) NOT NULL,
-  `nisn` varchar(50) DEFAULT NULL,
-  `nama` varchar(150) DEFAULT NULL,
-  `jenis_kelamin` enum('PUTRA','PUTRI') DEFAULT NULL,
-  `tanggal_lahir` date DEFAULT NULL,
-  `kelas` varchar(20) DEFAULT NULL,
-  `tinggi` int(11) DEFAULT NULL,
-  `berat` decimal(5,2) DEFAULT NULL,
+  `nama_lengkap` varchar(150) NOT NULL,
+  `jenis_kelamin` enum('L','P') NOT NULL,
+  `tanggal_lahir` date NOT NULL,
+  `tempat_lahir` varchar(100) DEFAULT NULL,
+  `nisn` varchar(20) NOT NULL,
+  `nis` varchar(20) DEFAULT NULL,
+  `sekolah` varchar(150) NOT NULL,
+  `kelas_jurusan` varchar(50) DEFAULT NULL,
+  `alamat` text DEFAULT NULL,
+  `kabupaten_kota` varchar(100) NOT NULL,
+  `no_hp` varchar(20) DEFAULT NULL,
+  `nama_ortu_wali` varchar(150) DEFAULT NULL,
+  `status` enum('draft','terdaftar','terverifikasi','ditolak') DEFAULT 'draft',
   `foto` varchar(255) DEFAULT NULL,
-  `status_verifikasi` enum('PENDING','VALID','DITOLAK') DEFAULT 'PENDING',
+  `file_kartu_pelajar` varchar(255) DEFAULT NULL,
+  `file_akte_kelahiran` varchar(255) DEFAULT NULL,
+  `file_kk` varchar(255) DEFAULT NULL,
+  `file_surat_keterangan_sekolah` varchar(255) DEFAULT NULL,
+  `file_surat_izin_ortu` varchar(255) DEFAULT NULL,
+  `prestasi_sebelumnya` text DEFAULT NULL,
+  `catatan` text DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -121,32 +146,7 @@ CREATE TABLE `master_cabor` (
 --
 
 INSERT INTO `master_cabor` (`id`, `nama`, `max_putra`, `max_putri`, `max_pelatih`, `is_active`, `created_at`) VALUES
-(1, 'Atletik', 26, 26, 4, 1, '2026-02-11 08:25:14'),
-(2, 'Angkat Besi', 5, 5, 3, 1, '2026-02-11 08:25:14'),
-(3, 'Bola Basket', 16, 16, 6, 1, '2026-02-11 08:25:14'),
-(4, 'Bola Voli Indoor', 12, 12, 4, 1, '2026-02-11 08:25:14'),
-(5, 'Bola Voli Pasir', 2, 2, 2, 1, '2026-02-11 08:25:14'),
-(6, 'Bulutangkis', 5, 5, 2, 1, '2026-02-11 08:25:14'),
-(7, 'Catur', 5, 5, 3, 1, '2026-02-11 08:25:14'),
-(8, 'Dayung', 20, 20, 3, 1, '2026-02-11 08:25:14'),
-(9, 'Gulat', 8, 3, 2, 1, '2026-02-11 08:25:14'),
-(10, 'Hockey', 12, 12, 2, 1, '2026-02-11 08:25:14'),
-(11, 'Judo', 5, 5, 2, 1, '2026-02-11 08:25:14'),
-(12, 'Karate', 10, 9, 4, 1, '2026-02-11 08:25:14'),
-(13, 'Kempo', 11, 11, 2, 1, '2026-02-11 08:25:14'),
-(14, 'Menembak', 8, 8, 4, 1, '2026-02-11 08:25:14'),
-(15, 'Panahan', 16, 16, 4, 1, '2026-02-11 08:25:14'),
-(16, 'Panjat Tebing', 7, 7, 2, 1, '2026-02-11 08:25:14'),
-(17, 'Pencak Silat', 15, 14, 4, 1, '2026-02-11 08:25:14'),
-(18, 'Renang', 10, 10, 2, 1, '2026-02-11 08:25:14'),
-(19, 'Sepak Bola', 18, 0, 3, 1, '2026-02-11 08:25:14'),
-(20, 'Sepak Takraw', 5, 5, 2, 1, '2026-02-11 08:25:14'),
-(21, 'Senam', 5, 8, 2, 1, '2026-02-11 08:25:14'),
-(22, 'Tae Kwon Do', 12, 12, 4, 1, '2026-02-11 08:25:14'),
-(23, 'Tenis Lapangan', 4, 4, 2, 1, '2026-02-11 08:25:14'),
-(24, 'Tenis Meja', 4, 4, 2, 1, '2026-02-11 08:25:14'),
-(25, 'Tinju', 8, 6, 4, 1, '2026-02-11 08:25:14'),
-(26, 'Wushu', 5, 4, 4, 1, '2026-02-11 08:25:14');
+(6, 'Bulutangkis', 5, 5, 2, 1, '2026-02-11 08:25:14');
 
 -- --------------------------------------------------------
 
@@ -169,171 +169,12 @@ CREATE TABLE `master_nomor` (
 --
 
 INSERT INTO `master_nomor` (`id`, `cabor_id`, `nama`, `jenis_kelamin`, `tipe`, `is_active`, `created_at`) VALUES
-(1, 1, '100 M', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:25:32'),
-(2, 1, '200 M', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:25:32'),
-(3, 1, '400 M', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:25:32'),
-(4, 1, '800 M', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:25:32'),
-(5, 1, '1500 M', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:25:32'),
-(6, 1, '5000 M', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:25:32'),
-(7, 1, 'Lompat Jauh', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:25:32'),
-(8, 1, '4x100 M Estafet', 'PUTRA', 'BEREGU', 1, '2026-02-11 08:25:32'),
-(9, 1, '100 M', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:25:32'),
-(10, 1, '200 M', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:25:32'),
-(11, 1, '400 M', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:25:32'),
-(12, 1, '800 M', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:25:32'),
-(13, 1, '1500 M', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:25:32'),
-(14, 1, '5000 M', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:25:32'),
-(15, 1, 'Lompat Jauh', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:25:32'),
-(16, 1, '4x100 M Estafet', 'PUTRI', 'BEREGU', 1, '2026-02-11 08:25:32'),
-(17, 19, 'Sepak Bola Putra', 'PUTRA', 'BEREGU', 1, '2026-02-11 08:26:01'),
-(18, 24, 'Tunggal', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:26:28'),
-(19, 24, 'Ganda', 'PUTRA', 'BEREGU', 1, '2026-02-11 08:26:28'),
-(20, 24, 'Beregu', 'PUTRA', 'BEREGU', 1, '2026-02-11 08:26:28'),
-(21, 24, 'Tunggal', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:26:28'),
-(22, 24, 'Ganda', 'PUTRI', 'BEREGU', 1, '2026-02-11 08:26:28'),
-(23, 24, 'Beregu', 'PUTRI', 'BEREGU', 1, '2026-02-11 08:26:28'),
-(24, 24, 'Ganda Campuran', 'CAMPURAN', 'BEREGU', 1, '2026-02-11 08:26:28'),
-(25, 1, '100 M', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(26, 1, '200 M', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(27, 1, '400 M', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(28, 1, '800 M', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(29, 1, '1500 M', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(30, 1, '5000 M', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(31, 1, 'Lompat Jauh', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(32, 1, 'Lompat Tinggi', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(33, 1, 'Tolak Peluru', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(34, 1, 'Lempar Lembing', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(35, 1, 'Lempar Cakram', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(36, 1, '4x100 M', 'PUTRA', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(37, 1, '4x400 M', 'PUTRA', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(38, 1, '100 M', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(39, 1, '200 M', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(40, 1, '400 M', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(41, 1, '800 M', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(42, 1, '1500 M', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(43, 1, '5000 M', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(44, 1, 'Lompat Jauh', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(45, 1, 'Lompat Tinggi', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(46, 1, 'Tolak Peluru', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(47, 1, 'Lempar Lembing', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(48, 1, 'Lempar Cakram', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(49, 1, '4x100 M', 'PUTRI', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(50, 1, '4x400 M', 'PUTRI', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(51, 2, '56 Kg', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(52, 2, '60 Kg', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(53, 2, '65 Kg', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(54, 2, '71 Kg', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(55, 2, '+71 Kg', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(56, 2, '44 Kg', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(57, 2, '48 Kg', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(58, 2, '53 Kg', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(59, 2, '58 Kg', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(60, 2, '+58 Kg', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(61, 3, 'Basket 5x5', 'PUTRA', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(62, 3, 'Basket 3x3', 'PUTRA', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(63, 3, 'Basket 5x5', 'PUTRI', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(64, 3, 'Basket 3x3', 'PUTRI', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(65, 4, 'Voli Indoor', 'PUTRA', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(66, 4, 'Voli Indoor', 'PUTRI', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(67, 5, 'Voli Pasir', 'PUTRA', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(68, 5, 'Voli Pasir', 'PUTRI', 'BEREGU', 1, '2026-02-11 08:38:00'),
 (69, 6, 'Tunggal', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
 (70, 6, 'Ganda', 'PUTRA', 'BEREGU', 1, '2026-02-11 08:38:00'),
 (71, 6, 'Beregu', 'PUTRA', 'BEREGU', 1, '2026-02-11 08:38:00'),
 (72, 6, 'Tunggal', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
 (73, 6, 'Ganda', 'PUTRI', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(74, 6, 'Beregu', 'PUTRI', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(75, 6, 'Ganda Campuran', 'CAMPURAN', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(76, 7, 'Cepat Beregu', 'PUTRA', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(77, 7, 'Kilat Beregu', 'PUTRA', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(78, 7, 'Standar Beregu', 'PUTRA', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(79, 7, 'Cepat Beregu', 'PUTRI', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(80, 7, 'Kilat Beregu', 'PUTRI', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(81, 7, 'Standar Beregu', 'PUTRI', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(82, 7, 'Mix Cepat', 'CAMPURAN', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(83, 7, 'Mix Kilat', 'CAMPURAN', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(84, 7, 'Mix Standar', 'CAMPURAN', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(85, 8, 'K1 200M', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(86, 8, 'K1 500M', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(87, 8, 'Dragon Boat', 'PUTRA', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(88, 8, 'K1 200M', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(89, 8, 'K1 500M', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(90, 8, 'Dragon Boat', 'PUTRI', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(91, 8, 'Dragon Boat Mix', 'CAMPURAN', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(92, 9, 'Gaya Bebas', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(93, 9, 'Gaya Bebas', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(94, 10, 'Hockey', 'PUTRA', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(95, 10, 'Hockey', 'PUTRI', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(96, 11, '50 Kg', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(97, 11, '55 Kg', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(98, 11, '60 Kg', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(99, 11, '52 Kg', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(100, 11, '57 Kg', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(101, 11, 'Beregu Campuran', 'CAMPURAN', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(102, 12, 'Kata', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(103, 12, 'Kumite', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(104, 12, 'Kata', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(105, 12, 'Kumite', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(106, 12, 'Kumite Beregu', 'PUTRA', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(107, 12, 'Kumite Beregu', 'PUTRI', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(108, 13, 'Randori', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(109, 13, 'Randori', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(110, 13, 'Embu Pasangan', 'CAMPURAN', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(111, 14, 'Air Pistol', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(112, 14, 'Air Rifle', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(113, 14, 'Air Pistol', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(114, 14, 'Air Rifle', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(115, 14, 'Mixed Team', 'CAMPURAN', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(116, 15, 'Recurve', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(117, 15, 'Compound', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(118, 15, 'Recurve', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(119, 15, 'Compound', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(120, 15, 'Mix Team', 'CAMPURAN', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(121, 16, 'Speed', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(122, 16, 'Lead', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(123, 16, 'Speed', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(124, 16, 'Lead', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(125, 16, 'Speed Mix', 'CAMPURAN', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(126, 17, 'Tunggal', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(127, 17, 'Ganda', 'PUTRA', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(128, 17, 'Regu', 'PUTRA', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(129, 17, 'Tunggal', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(130, 17, 'Ganda', 'PUTRI', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(131, 17, 'Regu', 'PUTRI', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(132, 18, '50 M Bebas', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(133, 18, '100 M Bebas', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(134, 18, '50 M Bebas', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(135, 18, '100 M Bebas', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(136, 19, 'Sepak Bola', 'PUTRA', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(137, 20, 'Inter Regu', 'PUTRA', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(138, 20, 'Double Event', 'PUTRA', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(139, 20, 'Inter Regu', 'PUTRI', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(140, 20, 'Double Event', 'PUTRI', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(141, 21, 'Artistik', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(142, 21, 'Artistik', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(143, 21, 'Ritmik', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(144, 22, 'Poomsae', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(145, 22, 'Kyorugi', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(146, 22, 'Poomsae', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(147, 22, 'Kyorugi', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(148, 23, 'Tunggal', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(149, 23, 'Ganda', 'PUTRA', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(150, 23, 'Tunggal', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(151, 23, 'Ganda', 'PUTRI', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(152, 23, 'Ganda Campuran', 'CAMPURAN', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(153, 24, 'Tunggal', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(154, 24, 'Ganda', 'PUTRA', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(155, 24, 'Tunggal', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(156, 24, 'Ganda', 'PUTRI', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(157, 24, 'Ganda Campuran', 'CAMPURAN', 'BEREGU', 1, '2026-02-11 08:38:00'),
-(158, 25, '45 Kg', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(159, 25, '48 Kg', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(160, 25, '50 Kg', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(161, 25, '52 Kg', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(162, 26, '48 Kg', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(163, 26, '52 Kg', 'PUTRA', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(164, 26, '48 Kg', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00'),
-(165, 26, '52 Kg', 'PUTRI', 'INDIVIDU', 1, '2026-02-11 08:38:00');
+(74, 6, 'Beregu', 'PUTRI', 'BEREGU', 1, '2026-02-11 08:38:00');
 
 -- --------------------------------------------------------
 
@@ -344,10 +185,24 @@ INSERT INTO `master_nomor` (`id`, `cabor_id`, `nama`, `jenis_kelamin`, `tipe`, `
 CREATE TABLE `master_official` (
   `id` bigint(20) NOT NULL,
   `kontingen_id` bigint(20) NOT NULL,
-  `nama` varchar(150) DEFAULT NULL,
-  `jabatan` varchar(100) DEFAULT NULL,
-  `no_hp` varchar(30) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `nama_lengkap` varchar(150) NOT NULL,
+  `jenis_kelamin` enum('L','P') NOT NULL,
+  `tanggal_lahir` date DEFAULT NULL,
+  `tempat_lahir` varchar(100) DEFAULT NULL,
+  `nik` varchar(20) DEFAULT NULL,
+  `sekolah_asal` varchar(150) DEFAULT NULL,
+  `jabatan` varchar(100) NOT NULL,
+  `alamat` text DEFAULT NULL,
+  `kabupaten_kota` varchar(100) NOT NULL,
+  `no_hp` varchar(20) NOT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `status` enum('draft','terdaftar','terverifikasi','ditolak') DEFAULT 'draft',
+  `foto` varchar(255) DEFAULT NULL,
+  `file_ktp` varchar(255) DEFAULT NULL,
+  `file_surat_tugas` varchar(255) DEFAULT NULL,
+  `catatan` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -359,11 +214,28 @@ CREATE TABLE `master_official` (
 CREATE TABLE `master_pelatih` (
   `id` bigint(20) NOT NULL,
   `kontingen_id` bigint(20) NOT NULL,
-  `nama` varchar(150) DEFAULT NULL,
-  `no_hp` varchar(30) DEFAULT NULL,
-  `sertifikat` varchar(255) DEFAULT NULL,
+  `nama_lengkap` varchar(150) NOT NULL,
+  `jenis_kelamin` enum('L','P') NOT NULL,
+  `tanggal_lahir` date DEFAULT NULL,
+  `tempat_lahir` varchar(100) DEFAULT NULL,
+  `nik` varchar(20) DEFAULT NULL,
+  `sekolah_asal` varchar(150) DEFAULT NULL,
+  `profesi` varchar(100) DEFAULT NULL,
+  `jabatan` varchar(100) DEFAULT NULL,
+  `alamat` text DEFAULT NULL,
+  `kabupaten_kota` varchar(100) NOT NULL,
+  `no_hp` varchar(20) NOT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `nama_istri_suami` varchar(150) DEFAULT NULL,
+  `status` enum('draft','terdaftar','terverifikasi','ditolak') DEFAULT 'draft',
   `foto` varchar(255) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `file_ktp` varchar(255) DEFAULT NULL,
+  `file_surat_tugas` varchar(255) DEFAULT NULL,
+  `file_sertifikat_pelatih` varchar(255) DEFAULT NULL,
+  `prestasi_sebelumnya` text DEFAULT NULL,
+  `catatan` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -384,47 +256,120 @@ CREATE TABLE `master_sekolah` (
 -- --------------------------------------------------------
 
 --
+-- Struktur dari tabel `modules`
+--
+
+CREATE TABLE `modules` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL COMMENT 'Nama teknis modul, contoh: dashboard, cabor',
+  `label` varchar(150) NOT NULL COMMENT 'Label tampilan, contoh: Dashboard, Cabor',
+  `code` varchar(50) NOT NULL COMMENT 'Kode unik huruf besar, contoh: DASHBOARD, CABOR',
+  `url` varchar(255) DEFAULT NULL COMMENT 'Path URL frontend, contoh: /dashboard',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Daftar modul/fitur dalam sistem POPDA 2026';
+
+--
+-- Dumping data untuk tabel `modules`
+--
+
+INSERT INTO `modules` (`id`, `name`, `label`, `code`, `url`, `created_at`, `updated_at`) VALUES
+(1, 'dashboard', 'Dashboard', 'DASHBOARD', '/dashboard', '2026-05-30 12:21:24', '2026-05-30 12:21:24'),
+(2, 'cabor', 'Cabang Olahraga', 'CABOR', '/master/cabor', '2026-05-30 12:21:24', '2026-05-30 12:21:24'),
+(3, 'nomor', 'Nomor Pertandingan', 'NOMOR', '/master/nomor', '2026-05-30 12:21:24', '2026-05-30 12:21:24'),
+(4, 'sekolah', 'Data Sekolah', 'SEKOLAH', '/master/sekolah', '2026-05-30 12:21:24', '2026-05-30 12:21:24'),
+(5, 'atlet', 'Master Atlet', 'ATLET', '/master/atlet', '2026-05-30 12:21:24', '2026-05-30 12:21:24'),
+(6, 'pelatih', 'Master Pelatih', 'PELATIH', '/master/pelatih', '2026-05-30 12:21:24', '2026-05-30 12:21:24'),
+(7, 'official', 'Master Official', 'OFFICIAL', '/master/official', '2026-05-30 12:21:24', '2026-05-30 12:21:24'),
+(8, 'trx_kontingen_cabor', 'Pendaftaran Cabor', 'TRX_KONTINGEN_CABOR', '/pendaftaran/cabor', '2026-05-30 12:21:24', '2026-05-30 12:21:24'),
+(9, 'trx_kontingen_nomor', 'Pendaftaran Nomor', 'TRX_KONTINGEN_NOMOR', '/pendaftaran/nomor', '2026-05-30 12:21:24', '2026-05-30 12:21:24'),
+(10, 'trx_pendaftaran_atlet', 'Pendaftaran Atlet & Tim', 'TRX_PENDAFTARAN_ATLET', '/pendaftaran/atlet', '2026-05-30 12:21:24', '2026-05-30 12:21:24'),
+(11, 'verifikasi', 'Verifikasi Berkas', 'VERIFIKASI', '/verifikasi', '2026-05-30 12:21:24', '2026-05-30 12:21:24'),
+(12, 'kontingen', 'Manajemen Kontingen', 'KONTINGEN', '/kontingen', '2026-05-30 12:21:24', '2026-05-30 12:21:24'),
+(13, 'user', 'Manajemen User', 'USER', '/settings/users', '2026-05-30 12:21:24', '2026-05-30 12:21:24'),
+(14, 'role', 'Manajemen Role / Akses', 'ROLE', '/settings/roles', '2026-05-30 12:21:24', '2026-05-30 12:21:24'),
+(15, 'territory', 'Wilayah / Kota / Kab', 'TERRITORY', '/settings/territory', '2026-05-30 12:21:24', '2026-05-30 12:21:24'),
+(16, 'permission', 'Hak Akses (Permission)', 'PERMISSION', '/settings/permissions', '2026-05-30 12:21:24', '2026-05-30 12:21:24');
+
+-- --------------------------------------------------------
+
+--
 -- Struktur dari tabel `permissions`
 --
 
 CREATE TABLE `permissions` (
   `id` int(11) NOT NULL,
+  `module_id` int(11) DEFAULT NULL,
   `name` varchar(100) NOT NULL,
-  `description` text DEFAULT NULL
+  `description` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `permissions`
 --
 
-INSERT INTO `permissions` (`id`, `name`, `description`) VALUES
-(1, 'dashboard.view', 'Melihat dashboard statistik'),
-(2, 'master.cabor.view', 'Melihat data master cabor'),
-(3, 'master.cabor.manage', 'Menambah / mengubah / menghapus master cabor'),
-(4, 'master.nomor.view', 'Melihat data master nomor'),
-(5, 'master.nomor.manage', 'Menambah / mengubah / menghapus master nomor'),
-(6, 'master.sekolah.view', 'Melihat data sekolah'),
-(7, 'master.sekolah.manage', 'Mengelola data sekolah'),
-(8, 'master.atlet.view', 'Melihat data atlet'),
-(9, 'master.atlet.manage', 'Mengelola data atlet'),
-(10, 'master.pelatih.view', 'Melihat data pelatih'),
-(11, 'master.pelatih.manage', 'Mengelola data pelatih'),
-(12, 'master.official.view', 'Melihat data official'),
-(13, 'master.official.manage', 'Mengelola data official'),
-(14, 'tahap1.view', 'Melihat data Tahap I'),
-(15, 'tahap1.submit', 'Submit Tahap I'),
-(16, 'tahap2.view', 'Melihat data Tahap II'),
-(17, 'tahap2.submit', 'Submit Tahap II'),
-(18, 'tahap3.view', 'Melihat data Tahap III'),
-(19, 'tahap3.submit', 'Submit Tahap III'),
-(20, 'verifikasi.view', 'Melihat data untuk verifikasi'),
-(21, 'verifikasi.approve', 'Approve atau tolak data'),
-(22, 'kontingen.view', 'Melihat data kontingen'),
-(23, 'kontingen.manage', 'Mengelola data kontingen'),
-(24, 'user.view', 'Melihat data user'),
-(25, 'user.manage', 'Mengelola data user'),
-(26, 'role.view', 'Melihat data role'),
-(27, 'role.manage', 'Mengelola data role');
+INSERT INTO `permissions` (`id`, `module_id`, `name`, `description`, `created_at`, `updated_at`) VALUES
+(1, 1, 'dashboard.read', 'Melihat dashboard statistik', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(2, 2, 'cabor.read', 'Melihat data cabor', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(3, 2, 'cabor.create', 'Menambah data cabor', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(4, 2, 'cabor.update', 'Mengubah data cabor', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(5, 2, 'cabor.delete', 'Menghapus data cabor', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(6, 3, 'nomor.read', 'Melihat data nomor', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(7, 3, 'nomor.create', 'Menambah data nomor', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(8, 3, 'nomor.update', 'Mengubah data nomor', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(9, 3, 'nomor.delete', 'Menghapus data nomor', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(10, 4, 'sekolah.read', 'Melihat data sekolah', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(11, 4, 'sekolah.create', 'Menambah data sekolah', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(12, 4, 'sekolah.update', 'Mengubah data sekolah', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(13, 4, 'sekolah.delete', 'Menghapus data sekolah', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(14, 5, 'atlet.read', 'Melihat data atlet', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(15, 5, 'atlet.create', 'Menambah data atlet', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(16, 5, 'atlet.update', 'Mengubah data atlet', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(17, 5, 'atlet.delete', 'Menghapus data atlet', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(18, 6, 'pelatih.read', 'Melihat data pelatih', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(19, 6, 'pelatih.create', 'Menambah data pelatih', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(20, 6, 'pelatih.update', 'Mengubah data pelatih', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(21, 6, 'pelatih.delete', 'Menghapus data pelatih', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(22, 7, 'official.read', 'Melihat data official', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(23, 7, 'official.create', 'Menambah data official', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(24, 7, 'official.update', 'Mengubah data official', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(25, 7, 'official.delete', 'Menghapus data official', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(26, 8, 'trx_kontingen_cabor.read', 'Melihat data transaksi kontingen cabor', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(27, 8, 'trx_kontingen_cabor.create', 'Menambah data transaksi kontingen cabor', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(28, 8, 'trx_kontingen_cabor.update', 'Mengubah data transaksi kontingen cabor', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(29, 8, 'trx_kontingen_cabor.delete', 'Menghapus data transaksi kontingen cabor', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(30, 9, 'trx_kontingen_nomor.read', 'Melihat data transaksi kontingen nomor', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(31, 9, 'trx_kontingen_nomor.create', 'Menambah data transaksi kontingen nomor', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(32, 9, 'trx_kontingen_nomor.update', 'Mengubah data transaksi kontingen nomor', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(33, 9, 'trx_kontingen_nomor.delete', 'Menghapus data transaksi kontingen nomor', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(34, 10, 'trx_pendaftaran_atlet.read', 'Melihat data transaksi pendaftaran atlet', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(35, 10, 'trx_pendaftaran_atlet.create', 'Menambah data transaksi pendaftaran atlet', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(36, 10, 'trx_pendaftaran_atlet.update', 'Mengubah data transaksi pendaftaran atlet', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(37, 10, 'trx_pendaftaran_atlet.delete', 'Menghapus data transaksi pendaftaran atlet', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(38, 11, 'verifikasi.read', 'Melihat data untuk verifikasi', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(39, 11, 'verifikasi.approve', 'Approve atau tolak data', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(40, 12, 'kontingen.read', 'Melihat data kontingen', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(41, 12, 'kontingen.create', 'Menambah data kontingen', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(42, 12, 'kontingen.update', 'Mengubah data kontingen', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(43, 12, 'kontingen.delete', 'Menghapus data kontingen', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(44, 13, 'user.read', 'Melihat data user', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(45, 13, 'user.create', 'Menambah data user', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(46, 13, 'user.update', 'Mengubah data user', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(47, 13, 'user.delete', 'Menghapus data user', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(48, 14, 'role.read', 'Melihat data role', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(49, 14, 'role.create', 'Menambah data role', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(50, 14, 'role.update', 'Mengubah data role', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(51, 14, 'role.delete', 'Menghapus data role', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(52, 15, 'territory.read', 'Melihat data territory', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(53, 15, 'territory.create', 'Menambah data territory', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(54, 15, 'territory.update', 'Mengubah data territory', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(55, 15, 'territory.delete', 'Menghapus data territory', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(56, 16, 'permission.read', 'Melihat data permission', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(57, 16, 'permission.create', 'Menambah data permission', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(58, 16, 'permission.update', 'Mengubah data permission', '2026-05-30 12:22:50', '2026-05-30 12:22:50'),
+(59, 16, 'permission.delete', 'Menghapus data permission', '2026-05-30 12:22:50', '2026-05-30 12:22:50');
 
 -- --------------------------------------------------------
 
@@ -457,6 +402,71 @@ CREATE TABLE `role_permissions` (
   `role_id` int(11) NOT NULL,
   `permission_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `role_permissions`
+--
+
+INSERT INTO `role_permissions` (`role_id`, `permission_id`) VALUES
+(1, 1),
+(1, 2),
+(1, 3),
+(1, 4),
+(1, 5),
+(1, 6),
+(1, 7),
+(1, 8),
+(1, 9),
+(1, 10),
+(1, 11),
+(1, 12),
+(1, 13),
+(1, 14),
+(1, 15),
+(1, 16),
+(1, 17),
+(1, 18),
+(1, 19),
+(1, 20),
+(1, 21),
+(1, 22),
+(1, 23),
+(1, 24),
+(1, 25),
+(1, 26),
+(1, 27),
+(1, 28),
+(1, 29),
+(1, 30),
+(1, 31),
+(1, 32),
+(1, 33),
+(1, 34),
+(1, 35),
+(1, 36),
+(1, 37),
+(1, 38),
+(1, 39),
+(1, 40),
+(1, 41),
+(1, 42),
+(1, 43),
+(1, 44),
+(1, 45),
+(1, 46),
+(1, 47),
+(1, 48),
+(1, 49),
+(1, 50),
+(1, 51),
+(1, 52),
+(1, 53),
+(1, 54),
+(1, 55),
+(1, 56),
+(1, 57),
+(1, 58),
+(1, 59);
 
 -- --------------------------------------------------------
 
@@ -504,6 +514,15 @@ CREATE TABLE `trx_kontingen_cabor` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Dumping data untuk tabel `trx_kontingen_cabor`
+--
+
+INSERT INTO `trx_kontingen_cabor` (`id`, `kontingen_id`, `cabor_id`, `putra`, `putri`, `pelatih`, `total_atlet`, `total_personel`, `created_at`) VALUES
+(1, 2, 6, 2, 1, 1, 3, 4, '2026-06-02 07:14:23'),
+(2, 3, 6, 2, 2, 2, 4, 6, '2026-06-02 07:54:29'),
+(3, 4, 6, 1, 1, 1, 2, 3, '2026-06-02 08:15:39');
+
+--
 -- Trigger `trx_kontingen_cabor`
 --
 DELIMITER $$
@@ -549,6 +568,13 @@ CREATE TABLE `trx_kontingen_nomor` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data untuk tabel `trx_kontingen_nomor`
+--
+
+INSERT INTO `trx_kontingen_nomor` (`id`, `kontingen_id`, `nomor_id`, `created_at`) VALUES
+(1, 3, 71, '2026-06-02 10:09:39');
+
 -- --------------------------------------------------------
 
 --
@@ -558,74 +584,38 @@ CREATE TABLE `trx_kontingen_nomor` (
 CREATE TABLE `trx_pendaftaran_atlet` (
   `id` bigint(20) NOT NULL,
   `atlet_id` bigint(20) NOT NULL,
+  `cabor_id` int(20) NOT NULL,
   `nomor_id` bigint(20) NOT NULL,
-  `kelas_id` bigint(20) DEFAULT NULL,
-  `status` enum('PENDING','VERIFIED','REJECTED') DEFAULT 'PENDING',
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
 --
--- Trigger `trx_pendaftaran_atlet`
+-- Struktur dari tabel `trx_pendaftaran_official`
 --
-DELIMITER $$
-CREATE TRIGGER `before_insert_trx_pendaftaran_atlet` BEFORE INSERT ON `trx_pendaftaran_atlet` FOR EACH ROW BEGIN
-    DECLARE kontingenId BIGINT;
-    DECLARE total INT;
 
-    SELECT kontingen_id INTO kontingenId
-    FROM master_atlet
-    WHERE id = NEW.atlet_id;
+CREATE TABLE `trx_pendaftaran_official` (
+  `id` bigint(20) NOT NULL,
+  `official_id` bigint(20) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-    SELECT COUNT(*) INTO total
-    FROM trx_kontingen_nomor
-    WHERE kontingen_id = kontingenId
-      AND nomor_id = NEW.nomor_id;
+-- --------------------------------------------------------
 
-    IF total = 0 THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Nomor belum dipilih pada Tahap II';
-    END IF;
+--
+-- Struktur dari tabel `trx_pendaftaran_pelatih`
+--
 
-END
-$$
-DELIMITER ;
-DELIMITER $$
-CREATE TRIGGER `trg_validasi_berat_atlet` BEFORE INSERT ON `trx_pendaftaran_atlet` FOR EACH ROW BEGIN
-    DECLARE v_berat DECIMAL(5,2);
-    DECLARE v_min DECIMAL(5,2);
-    DECLARE v_max DECIMAL(5,2);
-
-    -- Jika kelas NULL (tidak pakai berat), skip validasi
-    IF NEW.kelas_id IS NOT NULL THEN
-
-        -- Ambil berat atlet
-        SELECT berat INTO v_berat
-        FROM master_atlet
-        WHERE id = NEW.atlet_id;
-
-        -- Ambil batas berat kelas
-        SELECT berat_min, berat_max
-        INTO v_min, v_max
-        FROM master_kelas
-        WHERE id = NEW.kelas_id;
-
-        -- Validasi bawah
-        IF v_min IS NOT NULL AND v_berat < v_min THEN
-            SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'Berat atlet di bawah batas kelas!';
-        END IF;
-
-        -- Validasi atas
-        IF v_max IS NOT NULL AND v_berat > v_max THEN
-            SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'Berat atlet melebihi batas kelas!';
-        END IF;
-
-    END IF;
-
-END
-$$
-DELIMITER ;
+CREATE TABLE `trx_pendaftaran_pelatih` (
+  `id` bigint(20) NOT NULL,
+  `pelatih_id` bigint(20) NOT NULL,
+  `cabor_id` int(20) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -648,9 +638,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `is_active`, `created_at`, `avatar`) VALUES
-(1, 'Super Admin Dispora', 'superadmin@popda.id', 'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f', 1, '2026-02-11 07:58:38', NULL),
+(1, 'Super Admin Dispora', 'superadmin@popda.id', '871241dbf332bd665f337dbbe036fd560ee1af5731fd29a9d0fc449c44548d4a', 1, '2026-02-11 07:58:38', NULL),
 (2, 'Admin Kab Tangerang', 'admin.kabtangerang@popda.id', '871241dbf332bd665f337dbbe036fd560ee1af5731fd29a9d0fc449c44548d4a', 1, '2026-02-11 07:58:38', '/avatar/tangerangkab.png'),
-(3, 'Admin Kab Serang', 'admin.kabserang@popda.id', 'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f', 1, '2026-02-11 07:58:38', NULL),
+(3, 'Admin Kab Serang', 'admin.kabserang@popda.id', '871241dbf332bd665f337dbbe036fd560ee1af5731fd29a9d0fc449c44548d4a', 1, '2026-02-11 07:58:38', NULL),
 (4, 'Admin Kab Lebak', 'admin.kablebak@popda.id', 'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f', 1, '2026-02-11 07:58:38', NULL),
 (5, 'Admin Kab Pandeglang', 'admin.kabpandeglang@popda.id', 'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f', 1, '2026-02-11 07:58:38', NULL),
 (6, 'Admin Kota Tangerang', 'admin.kotatangerang@popda.id', 'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f', 1, '2026-02-11 07:58:38', NULL),
@@ -701,6 +691,14 @@ CREATE TABLE `user_territories` (
 
 INSERT INTO `user_territories` (`user_id`, `territory_id`) VALUES
 (1, 1),
+(1, 2),
+(1, 3),
+(1, 4),
+(1, 5),
+(1, 6),
+(1, 7),
+(1, 8),
+(1, 9),
 (2, 2),
 (3, 3),
 (4, 4),
@@ -733,8 +731,8 @@ ALTER TABLE `kontingen_identitas`
 --
 ALTER TABLE `master_atlet`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `kontingen_id` (`kontingen_id`),
-  ADD KEY `sekolah_id` (`sekolah_id`);
+  ADD UNIQUE KEY `nisn` (`nisn`),
+  ADD KEY `kontingen_id` (`kontingen_id`);
 
 --
 -- Indeks untuk tabel `master_cabor`
@@ -756,6 +754,7 @@ ALTER TABLE `master_nomor`
 --
 ALTER TABLE `master_official`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `nik` (`nik`),
   ADD KEY `kontingen_id` (`kontingen_id`);
 
 --
@@ -763,6 +762,7 @@ ALTER TABLE `master_official`
 --
 ALTER TABLE `master_pelatih`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `nik` (`nik`),
   ADD KEY `kontingen_id` (`kontingen_id`);
 
 --
@@ -772,11 +772,20 @@ ALTER TABLE `master_sekolah`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indeks untuk tabel `modules`
+--
+ALTER TABLE `modules`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `idx_modules_code` (`code`),
+  ADD UNIQUE KEY `idx_modules_name` (`name`);
+
+--
 -- Indeks untuk tabel `permissions`
 --
 ALTER TABLE `permissions`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `name` (`name`);
+  ADD UNIQUE KEY `idx_permissions_name` (`name`),
+  ADD KEY `fk_permissions_modules` (`module_id`);
 
 --
 -- Indeks untuk tabel `roles`
@@ -820,8 +829,23 @@ ALTER TABLE `trx_kontingen_nomor`
 ALTER TABLE `trx_pendaftaran_atlet`
   ADD PRIMARY KEY (`id`),
   ADD KEY `atlet_id` (`atlet_id`),
-  ADD KEY `nomor_id` (`nomor_id`),
-  ADD KEY `kelas_id` (`kelas_id`);
+  ADD KEY `cabor_id` (`cabor_id`),
+  ADD KEY `nomor_id` (`nomor_id`);
+
+--
+-- Indeks untuk tabel `trx_pendaftaran_official`
+--
+ALTER TABLE `trx_pendaftaran_official`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `official_id` (`official_id`);
+
+--
+-- Indeks untuk tabel `trx_pendaftaran_pelatih`
+--
+ALTER TABLE `trx_pendaftaran_pelatih`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `cabor_id` (`cabor_id`),
+  ADD KEY `pelatih_id` (`pelatih_id`);
 
 --
 -- Indeks untuk tabel `users`
@@ -852,13 +876,13 @@ ALTER TABLE `user_territories`
 -- AUTO_INCREMENT untuk tabel `kontingen`
 --
 ALTER TABLE `kontingen`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT untuk tabel `kontingen_identitas`
 --
 ALTER TABLE `kontingen_identitas`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT untuk tabel `master_atlet`
@@ -870,13 +894,13 @@ ALTER TABLE `master_atlet`
 -- AUTO_INCREMENT untuk tabel `master_cabor`
 --
 ALTER TABLE `master_cabor`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT untuk tabel `master_nomor`
 --
 ALTER TABLE `master_nomor`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=166;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=168;
 
 --
 -- AUTO_INCREMENT untuk tabel `master_official`
@@ -897,16 +921,22 @@ ALTER TABLE `master_sekolah`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT untuk tabel `modules`
+--
+ALTER TABLE `modules`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
 -- AUTO_INCREMENT untuk tabel `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
 
 --
 -- AUTO_INCREMENT untuk tabel `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT untuk tabel `territories`
@@ -918,13 +948,13 @@ ALTER TABLE `territories`
 -- AUTO_INCREMENT untuk tabel `trx_kontingen_cabor`
 --
 ALTER TABLE `trx_kontingen_cabor`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT untuk tabel `trx_kontingen_nomor`
 --
 ALTER TABLE `trx_kontingen_nomor`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT untuk tabel `trx_pendaftaran_atlet`
@@ -933,10 +963,22 @@ ALTER TABLE `trx_pendaftaran_atlet`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT untuk tabel `trx_pendaftaran_official`
+--
+ALTER TABLE `trx_pendaftaran_official`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `trx_pendaftaran_pelatih`
+--
+ALTER TABLE `trx_pendaftaran_pelatih`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT untuk tabel `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
@@ -958,8 +1000,7 @@ ALTER TABLE `kontingen_identitas`
 -- Ketidakleluasaan untuk tabel `master_atlet`
 --
 ALTER TABLE `master_atlet`
-  ADD CONSTRAINT `master_atlet_ibfk_1` FOREIGN KEY (`kontingen_id`) REFERENCES `kontingen` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `master_atlet_ibfk_2` FOREIGN KEY (`sekolah_id`) REFERENCES `master_sekolah` (`id`);
+  ADD CONSTRAINT `master_atlet_ibfk_1` FOREIGN KEY (`kontingen_id`) REFERENCES `kontingen` (`id`);
 
 --
 -- Ketidakleluasaan untuk tabel `master_nomor`
@@ -971,13 +1012,19 @@ ALTER TABLE `master_nomor`
 -- Ketidakleluasaan untuk tabel `master_official`
 --
 ALTER TABLE `master_official`
-  ADD CONSTRAINT `master_official_ibfk_1` FOREIGN KEY (`kontingen_id`) REFERENCES `kontingen` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `master_official_ibfk_1` FOREIGN KEY (`kontingen_id`) REFERENCES `kontingen` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ketidakleluasaan untuk tabel `master_pelatih`
 --
 ALTER TABLE `master_pelatih`
-  ADD CONSTRAINT `master_pelatih_ibfk_1` FOREIGN KEY (`kontingen_id`) REFERENCES `kontingen` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `master_pelatih_ibfk_1` FOREIGN KEY (`kontingen_id`) REFERENCES `kontingen` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ketidakleluasaan untuk tabel `permissions`
+--
+ALTER TABLE `permissions`
+  ADD CONSTRAINT `fk_permissions_modules` FOREIGN KEY (`module_id`) REFERENCES `modules` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Ketidakleluasaan untuk tabel `role_permissions`
@@ -1004,9 +1051,22 @@ ALTER TABLE `trx_kontingen_nomor`
 -- Ketidakleluasaan untuk tabel `trx_pendaftaran_atlet`
 --
 ALTER TABLE `trx_pendaftaran_atlet`
-  ADD CONSTRAINT `trx_pendaftaran_atlet_ibfk_1` FOREIGN KEY (`atlet_id`) REFERENCES `master_atlet` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `trx_pendaftaran_atlet_ibfk_2` FOREIGN KEY (`nomor_id`) REFERENCES `master_nomor` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `trx_pendaftaran_atlet_ibfk_3` FOREIGN KEY (`kelas_id`) REFERENCES `master_kelas` (`id`) ON DELETE SET NULL;
+  ADD CONSTRAINT `trx_pendaftaran_atlet_ibfk_1` FOREIGN KEY (`atlet_id`) REFERENCES `master_atlet` (`id`),
+  ADD CONSTRAINT `trx_pendaftaran_atlet_ibfk_2` FOREIGN KEY (`cabor_id`) REFERENCES `master_cabor` (`id`),
+  ADD CONSTRAINT `trx_pendaftaran_atlet_ibfk_3` FOREIGN KEY (`nomor_id`) REFERENCES `master_nomor` (`id`);
+
+--
+-- Ketidakleluasaan untuk tabel `trx_pendaftaran_official`
+--
+ALTER TABLE `trx_pendaftaran_official`
+  ADD CONSTRAINT `trx_pendaftaran_official_ibfk_1` FOREIGN KEY (`official_id`) REFERENCES `master_official` (`id`);
+
+--
+-- Ketidakleluasaan untuk tabel `trx_pendaftaran_pelatih`
+--
+ALTER TABLE `trx_pendaftaran_pelatih`
+  ADD CONSTRAINT `trx_pendaftaran_pelatih_ibfk_1` FOREIGN KEY (`cabor_id`) REFERENCES `master_cabor` (`id`),
+  ADD CONSTRAINT `trx_pendaftaran_pelatih_ibfk_2` FOREIGN KEY (`pelatih_id`) REFERENCES `master_pelatih` (`id`);
 
 --
 -- Ketidakleluasaan untuk tabel `user_roles`

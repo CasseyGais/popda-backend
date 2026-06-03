@@ -285,7 +285,7 @@ func (h *Handler) UpdateStatus(c *gin.Context) {
 }
 
 func (h *Handler) GetRoles(c *gin.Context) {
-	userID, err := strconv.ParseUint(c.Param("user_id"), 10, 32)
+	userID, err := strconv.ParseUint(c.Param("id"), 10, 32)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"success": false,
@@ -312,7 +312,7 @@ func (h *Handler) GetRoles(c *gin.Context) {
 }
 
 func (h *Handler) AssignRole(c *gin.Context) {
-	userID, err := strconv.ParseUint(c.Param("user_id"), 10, 32)
+	userID, err := strconv.ParseUint(c.Param("id"), 10, 32)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"success": false,
@@ -347,7 +347,7 @@ func (h *Handler) AssignRole(c *gin.Context) {
 }
 
 func (h *Handler) RemoveRole(c *gin.Context) {
-	userID, err := strconv.ParseUint(c.Param("user_id"), 10, 32)
+	userID, err := strconv.ParseUint(c.Param("id"), 10, 32)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"success": false,
@@ -382,7 +382,7 @@ func (h *Handler) RemoveRole(c *gin.Context) {
 }
 
 func (h *Handler) GetTerritories(c *gin.Context) {
-	userID, err := strconv.ParseUint(c.Param("user_id"), 10, 32)
+	userID, err := strconv.ParseUint(c.Param("id"), 10, 32)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"success": false,
@@ -409,7 +409,7 @@ func (h *Handler) GetTerritories(c *gin.Context) {
 }
 
 func (h *Handler) AssignTerritory(c *gin.Context) {
-	userID, err := strconv.ParseUint(c.Param("user_id"), 10, 32)
+	userID, err := strconv.ParseUint(c.Param("id"), 10, 32)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"success": false,
@@ -444,7 +444,7 @@ func (h *Handler) AssignTerritory(c *gin.Context) {
 }
 
 func (h *Handler) RemoveTerritory(c *gin.Context) {
-	userID, err := strconv.ParseUint(c.Param("user_id"), 10, 32)
+	userID, err := strconv.ParseUint(c.Param("id"), 10, 32)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"success": false,
