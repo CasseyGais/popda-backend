@@ -15,8 +15,8 @@ func (s *Service) GetKontingenIDByTerritory(territoryID uint) (uint, error) {
 	return s.repo.GetKontingenIDByTerritory(territoryID)
 }
 
-// GetData ambil status tahap2 + daftar nomor dari cabor yang dipilih di tahap 1,
-// beserta status terdaftar/tidak per nomor
+// GetData ambil status tahap2 + daftar nomor dari cabor yang dipilih di tahap 1
+// Response menyertakan kontingen_id dan territory_id agar frontend bisa verifikasi
 func (s *Service) GetData(kontingenID uint) (map[string]interface{}, error) {
 	kontingen, err := s.repo.GetKontingen(kontingenID)
 	if err != nil {
@@ -34,9 +34,14 @@ func (s *Service) GetData(kontingenID uint) (map[string]interface{}, error) {
 	}
 
 	return map[string]interface{}{
-		"tahap2_status":       kontingen.Tahap2Status,
-		"tahap2_submitted_at": kontingen.Tahap2SubmittedAt,
-		"nomor_list":          nomorList,
+		"kontingen_id":        kontingen.ID,
+		"territory_id":            kontingen.TerritoryID,
+		"nama_kontingen":          kontingen.NamaKontingen,
+		"tahap2_status":           kontingen.Tahap2Status,
+		"tahap2_submitted_at":     kontingen.Tahap2SubmittedAt,
+		"tahap2_validasi_status":  kontingen.Tahap2ValidasiStatus,
+		"tahap2_validasi_catatan": kontingen.Tahap2ValidasiCatatan,
+		"nomor_list":              nomorList,
 	}, nil
 }
 

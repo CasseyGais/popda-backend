@@ -42,14 +42,19 @@ func (r *Repository) GetKontingenIDByTerritory(territoryID uint) (uint, error) {
 	return kontingenID, nil
 }
 
-// SetTahap2Submitted set tahap2_status = SUBMITTED dan isi tahap2_submitted_at
+// SetTahap2Submitted set tahap2_status = SUBMITTED, isi submitted_at,
+// dan otomatis set tahap2_validasi_status = PENDING untuk review superadmin.
 func (r *Repository) SetTahap2Submitted(kontingenID uint) error {
 	now := time.Now()
+	pending := "PENDING"
 	return r.db.Model(&Kontingen{}).
 		Where("id = ?", kontingenID).
 		Updates(map[string]interface{}{
-			"tahap2_status":       "SUBMITTED",
-			"tahap2_submitted_at": now,
+			"tahap2_status":           "SUBMITTED",
+			"tahap2_submitted_at":     now,
+			"tahap2_validasi_status":  pending,
+			"tahap2_validasi_catatan": nil,
+			"tahap2_validasi_at":      nil,
 		}).Error
 }
 

@@ -3,6 +3,7 @@ package tahap1
 import (
 	"net/http"
 	"strconv"
+	"strings"
 
 	"popda_bulutangkis/pkg/jwt"
 
@@ -18,17 +19,48 @@ func NewHandler(service *Service) *Handler {
 }
 
 // resolveKontingenID menentukan kontingen_id yang akan dipakai:
-//   - Admin biasa  → pakai kontingen_id dari JWT (sudah terikat satu kontingen)
-//   - Superadmin   → wajib kirim ?territory_id=X, backend cari kontingen dari territory tersebut
+//
+//   - Admin biasa  → pakai kontingen_id dari JWT
+//   - Superadmin   → SELALU dari ?territory_id=X, tidak pernah dari JWT
+//
+// Superadmin dideteksi dari TIGA kondisi (defense in depth):
+//  1. claims.Role == "superadmin"  → cara utama (role dari JWT)
+//  2. claims.KontingenID == 0      → fallback: superadmin tidak punya kontingen
+//  3. ?territory_id ada di query   → opt-in override: siapapun yang kirim territory_id
+//                                    akan digunakan territory-nya
+//
+// Kondisi 3 memastikan bahkan token lama yang rolenya salah tetap bisa
+// di-resolve dengan benar selama frontend mengirim territory_id.
 func (h *Handler) resolveKontingenID(c *gin.Context, claims *jwt.Claims) (uint, bool) {
-	// Admin biasa — kontingen_id sudah ada di JWT
-	if claims.KontingenID != 0 {
-		return claims.KontingenID, true
+	isSuperadmin := strings.ToLower(claims.Role) == "superadmin" || claims.KontingenID == 0
+
+	// Jika territory_id ada di query, selalu gunakan (override JWT)
+	// Ini berlaku untuk superadmin maupun kasus khusus lainnya
+	if territoryIDStr := c.Query("territory_id"); territoryIDStr != "" {
+		territoryID, err := strconv.ParseUint(territoryIDStr, 10, 32)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"success": false,
+				"message": "territory_id tidak valid",
+			})
+			return 0, false
+		}
+
+		kontingenID, err := h.service.GetKontingenIDByTerritory(uint(territoryID))
+		if err != nil {
+			c.JSON(http.StatusNotFound, gin.H{
+				"success": false,
+				"message": "Kontingen untuk territory ini tidak ditemukan",
+			})
+			return 0, false
+		}
+
+		return kontingenID, true
 	}
 
-	// Superadmin — cari dari query param territory_id
-	territoryIDStr := c.Query("territory_id")
-	if territoryIDStr == "" {
+	// Tidak ada territory_id di query
+	// Superadmin wajib kirim territory_id
+	if isSuperadmin {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"success": false,
 			"message": "Superadmin wajib kirim query parameter territory_id",
@@ -36,25 +68,8 @@ func (h *Handler) resolveKontingenID(c *gin.Context, claims *jwt.Claims) (uint, 
 		return 0, false
 	}
 
-	territoryID, err := strconv.ParseUint(territoryIDStr, 10, 32)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"success": false,
-			"message": "territory_id tidak valid",
-		})
-		return 0, false
-	}
-
-	kontingenID, err := h.service.GetKontingenIDByTerritory(uint(territoryID))
-	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{
-			"success": false,
-			"message": "Kontingen untuk territory ini tidak ditemukan",
-		})
-		return 0, false
-	}
-
-	return kontingenID, true
+	// Admin biasa — kontingen_id dari JWT
+	return claims.KontingenID, true
 }
 
 // GET /admin/tahap1?territory_id=X

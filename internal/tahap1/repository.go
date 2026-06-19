@@ -96,14 +96,19 @@ func (r *Repository) GetKontingen(kontingenID uint) (*Kontingen, error) {
 	return &k, nil
 }
 
-// SetTahap1Submitted set tahap1_status = SUBMITTED dan isi tahap1_submitted_at
+// SetTahap1Submitted set tahap1_status = SUBMITTED, isi submitted_at,
+// dan otomatis set tahap1_validasi_status = PENDING untuk review superadmin.
 func (r *Repository) SetTahap1Submitted(kontingenID uint) error {
 	now := time.Now()
+	pending := "PENDING"
 	return r.db.Model(&Kontingen{}).
 		Where("id = ?", kontingenID).
 		Updates(map[string]interface{}{
-			"tahap1_status":       "SUBMITTED",
-			"tahap1_submitted_at": now,
+			"tahap1_status":           "SUBMITTED",
+			"tahap1_submitted_at":     now,
+			"tahap1_validasi_status":  pending,
+			"tahap1_validasi_catatan": nil,
+			"tahap1_validasi_at":      nil,
 		}).Error
 }
 

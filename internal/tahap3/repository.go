@@ -206,14 +206,19 @@ func (r *Repository) DeleteTrxOfficial(id uint) error {
 
 // ===== SUBMIT TAHAP 3 =====
 
-// SetTahap3Submitted set tahap3_status = SUBMITTED di tabel kontingen
+// SetTahap3Submitted set tahap3_status = SUBMITTED, isi submitted_at,
+// dan otomatis set tahap3_validasi_status = PENDING untuk review superadmin.
 func (r *Repository) SetTahap3Submitted(kontingenID uint) error {
 	now := time.Now()
+	pending := "PENDING"
 	return r.db.Model(&Kontingen{}).
 		Where("id = ?", kontingenID).
 		Updates(map[string]interface{}{
-			"tahap3_status":       "SUBMITTED",
-			"tahap3_submitted_at": now,
+			"tahap3_status":           "SUBMITTED",
+			"tahap3_submitted_at":     now,
+			"tahap3_validasi_status":  pending,
+			"tahap3_validasi_catatan": nil,
+			"tahap3_validasi_at":      nil,
 		}).Error
 }
 
@@ -300,4 +305,54 @@ func (r *Repository) BulkInsertTrxOfficials(kontingenID uint) error {
 		records = append(records, TrxPendaftaranOfficial{OfficialID: r2.OfficialID})
 	}
 	return r.db.Create(&records).Error
+}
+
+// ===== REFERENCE DATA — cabor & nomor yang dipilih kontingen =====
+
+// CaborTerpilih adalah cabor yang dipilih kontingen di tahap 1
+type CaborTerpilih struct {
+	CaborID   uint   `gorm:"column:cabor_id" json:"cabor_id"`
+	NamaCabor string `gorm:"column:nama_cabor" json:"nama_cabor"`
+}
+
+// NomorTerdaftar adalah nomor yang dicentang kontingen di tahap 2
+type NomorTerdaftar struct {
+	NomorID      uint   `gorm:"column:nomor_id" json:"nomor_id"`
+	CaborID      uint   `gorm:"column:cabor_id" json:"cabor_id"`
+	NamaCabor    string `gorm:"column:nama_cabor" json:"nama_cabor"`
+	NamaNomor    string `gorm:"column:nama_nomor" json:"nama_nomor"`
+	JenisKelamin string `gorm:"column:jenis_kelamin" json:"jenis_kelamin"`
+	Tipe         string `gorm:"column:tipe" json:"tipe"`
+}
+
+// GetCaborTerpilih ambil cabor yang sudah dipilih kontingen di tahap 1
+func (r *Repository) GetCaborTerpilih(kontingenID uint) ([]CaborTerpilih, error) {
+	var result []CaborTerpilih
+	err := r.db.Table("trx_kontingen_cabor tkc").
+		Select("tkc.cabor_id, mc.nama AS nama_cabor").
+		Joins("JOIN master_cabor mc ON mc.id = tkc.cabor_id").
+		Where("tkc.kontingen_id = ?", kontingenID).
+		Order("mc.nama ASC").
+		Scan(&result).Error
+	return result, err
+}
+
+// GetNomorTerdaftar ambil nomor pertandingan yang dicentang kontingen di tahap 2
+func (r *Repository) GetNomorTerdaftar(kontingenID uint) ([]NomorTerdaftar, error) {
+	var result []NomorTerdaftar
+	err := r.db.Table("trx_kontingen_nomor tkn").
+		Select(`
+			tkn.nomor_id,
+			mn.cabor_id,
+			mc.nama  AS nama_cabor,
+			mn.nama  AS nama_nomor,
+			mn.jenis_kelamin,
+			mn.tipe
+		`).
+		Joins("JOIN master_nomor mn ON mn.id = tkn.nomor_id").
+		Joins("JOIN master_cabor mc ON mc.id = mn.cabor_id").
+		Where("tkn.kontingen_id = ?", kontingenID).
+		Order("mc.nama ASC, mn.jenis_kelamin ASC, mn.nama ASC").
+		Scan(&result).Error
+	return result, err
 }

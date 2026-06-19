@@ -18,7 +18,12 @@ func (s *Service) GetKontingenIDByTerritory(territoryID uint) (uint, error) {
 	return s.repo.GetKontingenIDByTerritory(territoryID)
 }
 
-// GetData ambil semua data tahap 3 milik kontingen
+// GetData ambil semua data tahap 3 milik kontingen.
+// Termasuk:
+//   - cabor_terpilih : cabor yang dipilih di tahap 1 (untuk filter di form input atlet)
+//   - nomor_terdaftar: nomor yang dicentang di tahap 2 (untuk dropdown assign atlet ke nomor)
+//   - atlets, pelatihs, officials: data master yang sudah diinput
+//   - trx_*: pendaftaran yang sudah terjadi
 func (s *Service) GetData(kontingenID uint) (map[string]interface{}, error) {
 	kontingen, err := s.repo.GetKontingen(kontingenID)
 	if err != nil {
@@ -32,11 +37,26 @@ func (s *Service) GetData(kontingenID uint) (map[string]interface{}, error) {
 	trxPelatihs, _ := s.repo.GetTrxPelatihs(kontingenID)
 	trxOfficials, _ := s.repo.GetTrxOfficials(kontingenID)
 
+	// Referensi dari tahap sebelumnya
+	caborTerpilih, _ := s.repo.GetCaborTerpilih(kontingenID)
+	nomorTerdaftar, _ := s.repo.GetNomorTerdaftar(kontingenID)
+
 	return map[string]interface{}{
-		"kontingen":     kontingen,
-		"atlets":        atlets,
-		"pelatihs":      pelatihs,
-		"officials":     officials,
+		"kontingen_id":        kontingen.ID,
+		"territory_id":            kontingen.TerritoryID,
+		"nama_kontingen":          kontingen.NamaKontingen,
+		"tahap3_status":           kontingen.Tahap3Status,
+		"tahap3_submitted_at":     kontingen.Tahap3SubmittedAt,
+		"tahap3_validasi_status":  kontingen.Tahap3ValidasiStatus,
+		"tahap3_validasi_catatan": kontingen.Tahap3ValidasiCatatan,
+		// Referensi tahap sebelumnya — untuk filter UI
+		"cabor_terpilih":  caborTerpilih,
+		"nomor_terdaftar": nomorTerdaftar,
+		// Data master tahap 3
+		"atlets":    atlets,
+		"pelatihs":  pelatihs,
+		"officials": officials,
+		// Transaksi pendaftaran
 		"trx_atlets":    trxAtlets,
 		"trx_pelatihs":  trxPelatihs,
 		"trx_officials": trxOfficials,
@@ -341,6 +361,16 @@ func (s *Service) Submit(kontingenID uint) error {
 
 	// Set tahap3_status = SUBMITTED
 	return s.repo.SetTahap3Submitted(kontingenID)
+}
+
+// GetCaborTerpilih ambil cabor yang dipilih di tahap 1 (referensi untuk filter UI tahap 3)
+func (s *Service) GetCaborTerpilih(kontingenID uint) ([]CaborTerpilih, error) {
+	return s.repo.GetCaborTerpilih(kontingenID)
+}
+
+// GetNomorTerdaftar ambil nomor yang dicentang di tahap 2 (referensi dropdown assign atlet)
+func (s *Service) GetNomorTerdaftar(kontingenID uint) ([]NomorTerdaftar, error) {
+	return s.repo.GetNomorTerdaftar(kontingenID)
 }
 
 // ===== EXPORT =====

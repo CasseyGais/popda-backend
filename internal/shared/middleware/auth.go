@@ -70,7 +70,7 @@ func PermissionRequired(db *gorm.DB, permissionName string) gin.HandlerFunc {
 		}
 
 		// Superadmin bypass semua permission check
-		if role.(string) == "superadmin" {
+		if strings.ToLower(role.(string)) == "superadmin" {
 			c.Next()
 			return
 		}
@@ -116,13 +116,49 @@ func PermissionRequired(db *gorm.DB, permissionName string) gin.HandlerFunc {
 func SuperadminOnly() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		role, exists := c.Get("role")
-		if !exists || role.(string) != "superadmin" {
+		if !exists || strings.ToLower(role.(string)) != "superadmin" {
 			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{
 				"success": false,
 				"message": "Akses ditolak — hanya superadmin yang diizinkan",
 			})
 			return
 		}
+		c.Next()
+	}
+}
+
+// RolesAllowed mengizinkan akses hanya untuk role tertentu (case-insensitive).
+// Superadmin selalu lolos.
+//
+// Contoh pemakaian:
+//
+//	admin.GET("/sertifikat", middleware.RolesAllowed("SUPERADMIN", "STAFF_LAPANGAN"), handler.GetAll)
+func RolesAllowed(roles ...string) gin.HandlerFunc {
+	// Normalkan ke lowercase sekali saat middleware dibuat
+	allowed := make(map[string]bool, len(roles))
+	for _, r := range roles {
+		allowed[strings.ToLower(r)] = true
+	}
+
+	return func(c *gin.Context) {
+		role, exists := c.Get("role")
+		if !exists {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+				"success": false,
+				"message": "Role tidak ditemukan di token",
+			})
+			return
+		}
+
+		roleStr := strings.ToLower(role.(string))
+		if !allowed[roleStr] {
+			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{
+				"success": false,
+				"message": "Akses ditolak — endpoint ini hanya untuk: " + strings.Join(roles, ", "),
+			})
+			return
+		}
+
 		c.Next()
 	}
 }

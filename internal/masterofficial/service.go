@@ -2,89 +2,164 @@ package masterofficial
 
 import (
 	"errors"
+	"fmt"
 )
 
 type Service struct {
-	repository *Repository
+	repo *Repository
 }
 
-func NewService(repository *Repository) *Service {
-	return &Service{repository: repository}
+func NewService(repo *Repository) *Service {
+	return &Service{repo: repo}
 }
 
-func (s *Service) GetAll() ([]MasterOfficial, error) {
-	return s.repository.GetAll()
+// GetKontingenIDByTerritory untuk handler resolveKontingenID
+func (s *Service) GetKontingenIDByTerritory(territoryID uint) (uint, error) {
+	return s.repo.GetKontingenIDByTerritory(territoryID)
 }
 
-func (s *Service) GetByID(id uint) (*MasterOfficial, error) {
-	official, err := s.repository.GetByID(id)
-	if err != nil {
-		return nil, errors.New("official tidak ditemukan")
-	}
-	return official, nil
-}
-
+// GetByKontingenID ambil semua official milik kontingen
 func (s *Service) GetByKontingenID(kontingenID uint) ([]MasterOfficial, error) {
-	return s.repository.GetByKontingenID(kontingenID)
+	return s.repo.GetByKontingenID(kontingenID)
 }
 
-func (s *Service) Create(request *CreateMasterOfficialRequest) (*MasterOfficial, error) {
-	official := &MasterOfficial{
-		KontingenID: request.KontingenID,
-		Nama:        request.Nama,
-		Jabatan:     request.Jabatan,
-		NoHP:        request.NoHP,
-	}
-
-	err := s.repository.Create(official)
-	if err != nil {
-		return nil, errors.New("gagal membuat official")
-	}
-
-	return official, nil
-}
-
-func (s *Service) Update(id uint, request *UpdateMasterOfficialRequest) (*MasterOfficial, error) {
-	official, err := s.repository.GetByID(id)
+// GetByID ambil satu official
+func (s *Service) GetByID(id uint) (*MasterOfficial, error) {
+	o, err := s.repo.GetByID(id)
 	if err != nil {
 		return nil, errors.New("official tidak ditemukan")
 	}
+	return o, nil
+}
 
-	if request.Nama != "" {
-		official.Nama = request.Nama
+// Create buat official baru — kontingen_id dari JWT/territory, bukan dari body
+func (s *Service) Create(kontingenID uint, req *CreateMasterOfficialRequest) (*MasterOfficial, error) {
+	o := &MasterOfficial{
+		KontingenID:   kontingenID,
+		NamaLengkap:   req.NamaLengkap,
+		JenisKelamin:  req.JenisKelamin,
+		TanggalLahir:  req.TanggalLahir,
+		TempatLahir:   req.TempatLahir,
+		NIK:           req.NIK,
+		SekolahAsal:   req.SekolahAsal,
+		Jabatan:       req.Jabatan,
+		Alamat:        req.Alamat,
+		KabupatenKota: req.KabupatenKota,
+		NoHP:          req.NoHP,
+		Email:         req.Email,
+		Catatan:       req.Catatan,
+		Status:        "draft",
 	}
-	if request.Jabatan != "" {
-		official.Jabatan = request.Jabatan
+	if err := s.repo.Create(o); err != nil {
+		return nil, fmt.Errorf("gagal membuat official: %w", err)
 	}
-	if request.NoHP != "" {
-		official.NoHP = request.NoHP
-	}
+	return o, nil
+}
 
-	err = s.repository.Update(official)
+// Update ubah data official — validasi kepemilikan kontingen
+func (s *Service) Update(id uint, kontingenID uint, req *UpdateMasterOfficialRequest) (*MasterOfficial, error) {
+	o, err := s.repo.GetByID(id)
 	if err != nil {
+		return nil, errors.New("official tidak ditemukan")
+	}
+	if o.KontingenID != kontingenID {
+		return nil, errors.New("tidak diizinkan mengubah data official kontingen lain")
+	}
+	if req.NamaLengkap != "" {
+		o.NamaLengkap = req.NamaLengkap
+	}
+	if req.JenisKelamin != "" {
+		o.JenisKelamin = req.JenisKelamin
+	}
+	if req.TanggalLahir != "" {
+		o.TanggalLahir = req.TanggalLahir
+	}
+	if req.TempatLahir != "" {
+		o.TempatLahir = req.TempatLahir
+	}
+	if req.NIK != "" {
+		o.NIK = req.NIK
+	}
+	if req.SekolahAsal != "" {
+		o.SekolahAsal = req.SekolahAsal
+	}
+	if req.Jabatan != "" {
+		o.Jabatan = req.Jabatan
+	}
+	if req.Alamat != "" {
+		o.Alamat = req.Alamat
+	}
+	if req.KabupatenKota != "" {
+		o.KabupatenKota = req.KabupatenKota
+	}
+	if req.NoHP != "" {
+		o.NoHP = req.NoHP
+	}
+	if req.Email != "" {
+		o.Email = req.Email
+	}
+	if req.Catatan != "" {
+		o.Catatan = req.Catatan
+	}
+	if err := s.repo.Update(o); err != nil {
 		return nil, errors.New("gagal mengupdate official")
 	}
-
-	return official, nil
+	return o, nil
 }
 
-func (s *Service) Delete(id uint) error {
-	err := s.repository.Delete(id)
+// Delete hapus official beserta trx-nya — validasi kepemilikan kontingen
+func (s *Service) Delete(id uint, kontingenID uint) error {
+	o, err := s.repo.GetByID(id)
 	if err != nil {
-		return errors.New("gagal menghapus official")
+		return errors.New("official tidak ditemukan")
 	}
-	return nil
+	if o.KontingenID != kontingenID {
+		return errors.New("tidak diizinkan menghapus official kontingen lain")
+	}
+	if err := s.repo.DeleteTrxByOfficial(id); err != nil {
+		return fmt.Errorf("gagal menghapus transaksi official: %w", err)
+	}
+	return s.repo.Delete(id)
 }
 
-type CreateMasterOfficialRequest struct {
-	KontingenID uint   `json:"kontingen_id" binding:"required"`
-	Nama        string `json:"nama" binding:"required"`
-	Jabatan     string `json:"jabatan" binding:"required"`
-	NoHP        string `json:"no_hp"`
+// UpdateFile update path file/foto — validasi kepemilikan
+func (s *Service) UpdateFile(id uint, kontingenID uint, column, path string) error {
+	o, err := s.repo.GetByID(id)
+	if err != nil {
+		return errors.New("official tidak ditemukan")
+	}
+	if o.KontingenID != kontingenID {
+		return errors.New("tidak diizinkan mengubah file official kontingen lain")
+	}
+	return s.repo.UpdateFile(id, column, path)
 }
 
-type UpdateMasterOfficialRequest struct {
-	Nama    string `json:"nama"`
-	Jabatan string `json:"jabatan"`
-	NoHP    string `json:"no_hp"`
+// ===== TRX PENDAFTARAN =====
+
+// GetTrxByKontingen ambil daftar trx pendaftaran official milik kontingen
+func (s *Service) GetTrxByKontingen(kontingenID uint) ([]TrxPendaftaranOfficial, error) {
+	return s.repo.GetTrxByKontingen(kontingenID)
+}
+
+// CreateTrx daftarkan official — validasi official milik kontingen, otomatis isi trx_pendaftaran_official
+func (s *Service) CreateTrx(kontingenID, officialID uint) (*TrxPendaftaranOfficial, error) {
+	o, err := s.repo.GetByID(officialID)
+	if err != nil {
+		return nil, errors.New("official tidak ditemukan")
+	}
+	if o.KontingenID != kontingenID {
+		return nil, errors.New("tidak diizinkan mendaftarkan official kontingen lain")
+	}
+	trx := &TrxPendaftaranOfficial{
+		OfficialID: officialID,
+	}
+	if err := s.repo.CreateTrx(trx); err != nil {
+		return nil, fmt.Errorf("gagal mendaftarkan official: %w", err)
+	}
+	return trx, nil
+}
+
+// DeleteTrx batalkan pendaftaran official
+func (s *Service) DeleteTrx(id uint) error {
+	return s.repo.DeleteTrx(id)
 }

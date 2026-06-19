@@ -35,17 +35,26 @@ type NomorWithStatus struct {
 
 // Kontingen untuk baca/update tahap2_status dari tabel kontingen.
 type Kontingen struct {
-	ID                uint       `gorm:"primaryKey;column:id" json:"id"`
-	TerritoryID       uint       `gorm:"column:territory_id" json:"territory_id"`
-	NamaKontingen     string     `gorm:"column:nama_kontingen" json:"nama_kontingen"`
-	Tahap1Status      string     `gorm:"column:tahap1_status" json:"tahap1_status"`
-	Tahap1SubmittedAt *time.Time `gorm:"column:tahap1_submitted_at" json:"tahap1_submitted_at"`
-	Tahap2Status      string     `gorm:"column:tahap2_status" json:"tahap2_status"`
-	Tahap2SubmittedAt *time.Time `gorm:"column:tahap2_submitted_at" json:"tahap2_submitted_at"`
-	Tahap3Status      string     `gorm:"column:tahap3_status" json:"tahap3_status"`
-	Tahap3SubmittedAt *time.Time `gorm:"column:tahap3_submitted_at" json:"tahap3_submitted_at"`
-	CreatedAt         time.Time  `gorm:"column:created_at;autoCreateTime" json:"created_at"`
-	UpdatedAt         time.Time  `gorm:"column:updated_at;autoUpdateTime" json:"updated_at"`
+	ID                    uint       `gorm:"primaryKey;column:id" json:"id"`
+	TerritoryID           uint       `gorm:"column:territory_id" json:"territory_id"`
+	NamaKontingen         string     `gorm:"column:nama_kontingen" json:"nama_kontingen"`
+	Tahap1Status          string     `gorm:"column:tahap1_status" json:"tahap1_status"`
+	Tahap1SubmittedAt     *time.Time `gorm:"column:tahap1_submitted_at" json:"tahap1_submitted_at"`
+	Tahap1ValidasiStatus  *string    `gorm:"column:tahap1_validasi_status" json:"tahap1_validasi_status"`
+	Tahap1ValidasiCatatan *string    `gorm:"column:tahap1_validasi_catatan" json:"tahap1_validasi_catatan"`
+	Tahap1ValidasiAt      *time.Time `gorm:"column:tahap1_validasi_at" json:"tahap1_validasi_at"`
+	Tahap2Status          string     `gorm:"column:tahap2_status" json:"tahap2_status"`
+	Tahap2SubmittedAt     *time.Time `gorm:"column:tahap2_submitted_at" json:"tahap2_submitted_at"`
+	Tahap2ValidasiStatus  *string    `gorm:"column:tahap2_validasi_status" json:"tahap2_validasi_status"`
+	Tahap2ValidasiCatatan *string    `gorm:"column:tahap2_validasi_catatan" json:"tahap2_validasi_catatan"`
+	Tahap2ValidasiAt      *time.Time `gorm:"column:tahap2_validasi_at" json:"tahap2_validasi_at"`
+	Tahap3Status          string     `gorm:"column:tahap3_status" json:"tahap3_status"`
+	Tahap3SubmittedAt     *time.Time `gorm:"column:tahap3_submitted_at" json:"tahap3_submitted_at"`
+	Tahap3ValidasiStatus  *string    `gorm:"column:tahap3_validasi_status" json:"tahap3_validasi_status"`
+	Tahap3ValidasiCatatan *string    `gorm:"column:tahap3_validasi_catatan" json:"tahap3_validasi_catatan"`
+	Tahap3ValidasiAt      *time.Time `gorm:"column:tahap3_validasi_at" json:"tahap3_validasi_at"`
+	CreatedAt             time.Time  `gorm:"column:created_at;autoCreateTime" json:"created_at"`
+	UpdatedAt             time.Time  `gorm:"column:updated_at;autoUpdateTime" json:"updated_at"`
 }
 
 func (Kontingen) TableName() string {
