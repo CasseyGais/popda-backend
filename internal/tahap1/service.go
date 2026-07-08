@@ -123,7 +123,19 @@ func (s *Service) Submit(kontingenID uint) error {
 	return s.repo.SetTahap1Submitted(kontingenID)
 }
 
-// GetExportData menyiapkan data lengkap untuk export PDF/Excel tahap 1
+// ResetTahap1 kembalikan tahap1_status ke DRAFT agar kontingen bisa edit & submit ulang.
+// Hanya superadmin yang boleh memanggil ini (guard di handler).
+// Juga reset validasi status ke NULL karena data akan diubah.
+func (s *Service) ResetTahap1(kontingenID uint) error {
+	kontingen, err := s.repo.GetKontingen(kontingenID)
+	if err != nil {
+		return errors.New("kontingen tidak ditemukan")
+	}
+	if kontingen.Tahap1Status != "SUBMITTED" {
+		return errors.New("Tahap 1 belum disubmit, tidak perlu di-reset")
+	}
+	return s.repo.ResetTahap1(kontingenID)
+}
 func (s *Service) GetExportData(kontingenID uint) (*ExportData, error) {
 	kontingen, err := s.repo.GetKontingen(kontingenID)
 	if err != nil {

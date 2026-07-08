@@ -449,6 +449,28 @@ func (h *Handler) UploadOfficialFile(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"success": true, "message": "File berhasil diupload", "path": path})
 }
 
+// ===== STATISTIK =====
+
+// GET /admin/tahap3/statistik/atlet
+// Hitung jumlah atlet dari seluruh kontingen.
+// Bisa diakses semua role — superadmin tidak perlu territory_id.
+func (h *Handler) GetStatistikAtlet(c *gin.Context) {
+	data, err := h.service.GetStatistikAtlet()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "Gagal menghitung statistik atlet",
+			"error":   err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "Statistik atlet berhasil diambil",
+		"data":    data,
+	})
+}
+
 // ===== TRX PENDAFTARAN =====
 
 // POST /admin/tahap3/trx/atlet

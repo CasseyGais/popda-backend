@@ -130,3 +130,17 @@ func (r *Repository) GetCaborWithNama(kontingenID uint) ([]CaborExportRow, error
 		Scan(&result).Error
 	return result, err
 }
+
+// ResetTahap1 kembalikan tahap1_status ke DRAFT dan reset validasi ke NULL.
+// Dipanggil superadmin agar kontingen bisa edit dan submit ulang.
+func (r *Repository) ResetTahap1(kontingenID uint) error {
+	return r.db.Model(&Kontingen{}).
+		Where("id = ?", kontingenID).
+		Updates(map[string]interface{}{
+			"tahap1_status":           "DRAFT",
+			"tahap1_submitted_at":     nil,
+			"tahap1_validasi_status":  nil,
+			"tahap1_validasi_catatan": nil,
+			"tahap1_validasi_at":      nil,
+		}).Error
+}

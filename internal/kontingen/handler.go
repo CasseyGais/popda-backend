@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"path/filepath"
+	"strconv"
 	"time"
 
 	"popda_bulutangkis/pkg/jwt"
@@ -233,5 +234,116 @@ func (h *Handler) UpdateKontingen(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Kontingen berhasil diperbarui",
 		"data":    updated,
+	})
+}
+
+// ================= RESET TAHAP =================
+
+// resolveKontingenIDForReset meng-resolve kontingen_id dari query ?territory_id=X
+// (superadmin) atau dari JWT claims (user biasa).
+// Endpoint reset hanya bisa diakses superadmin, tapi helper ini tetap generik
+// agar mudah dipakai ulang.
+func (h *Handler) resolveKontingenIDForReset(c *gin.Context, claims *jwt.Claims) (uint, bool) {
+	if territoryIDStr := c.Query("territory_id"); territoryIDStr != "" {
+		tid, err := strconv.ParseUint(territoryIDStr, 10, 32)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"success": false,
+				"message": "territory_id tidak valid",
+			})
+			return 0, false
+		}
+
+		k, err := h.service.GetKontingenByTerritoryID(uint(tid))
+		if err != nil || k == nil {
+			c.JSON(http.StatusNotFound, gin.H{
+				"success": false,
+				"message": "Kontingen untuk territory ini tidak ditemukan",
+			})
+			return 0, false
+		}
+		return k.ID, true
+	}
+
+	// Fallback ke KontingenID dari JWT
+	if claims.KontingenID == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"success": false,
+			"message": "Superadmin wajib kirim query parameter territory_id",
+		})
+		return 0, false
+	}
+	return claims.KontingenID, true
+}
+
+// POST /admin/tahap1/reset — hanya SUPERADMIN
+func (h *Handler) ResetTahap1(c *gin.Context) {
+	claims := c.MustGet("user").(*jwt.Claims)
+
+	kontingenID, ok := h.resolveKontingenIDForReset(c, claims)
+	if !ok {
+		return
+	}
+
+	if err := h.service.ResetTahap(kontingenID, 1); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "Gagal mereset tahap 1",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "Tahap 1 berhasil direset ke DRAFT",
+	})
+}
+
+// POST /admin/tahap2/reset — hanya SUPERADMIN
+func (h *Handler) ResetTahap2(c *gin.Context) {
+	claims := c.MustGet("user").(*jwt.Claims)
+
+	kontingenID, ok := h.resolveKontingenIDForReset(c, claims)
+	if !ok {
+		return
+	}
+
+	if err := h.service.ResetTahap(kontingenID, 2); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "Gagal mereset tahap 2",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "Tahap 2 berhasil direset ke DRAFT",
+	})
+}
+
+// POST /admin/tahap3/reset — hanya SUPERADMIN
+func (h *Handler) ResetTahap3(c *gin.Context) {
+	claims := c.MustGet("user").(*jwt.Claims)
+
+	kontingenID, ok := h.resolveKontingenIDForReset(c, claims)
+	if !ok {
+		return
+	}
+
+	if err := h.service.ResetTahap(kontingenID, 3); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "Gagal mereset tahap 3",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "Tahap 3 berhasil direset ke DRAFT",
 	})
 }

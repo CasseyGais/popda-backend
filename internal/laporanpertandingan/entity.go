@@ -1,14 +1,63 @@
 package laporanpertandingan
 
 import (
+	"database/sql/driver"
+	"fmt"
 	"strings"
 	"time"
 )
 
 // TanggalDate adalah custom type untuk kolom DATE di MariaDB.
 // Serialize ke JSON sebagai "YYYY-MM-DD" (bukan timestamp dengan timezone).
+// Implement sql.Scanner agar GORM bisa scan nilai DATE dari DB.
 type TanggalDate struct {
 	time.Time
+}
+
+// Scan implement sql.Scanner — dipanggil GORM saat read dari DB
+func (t *TanggalDate) Scan(value interface{}) error {
+	if value == nil {
+		t.Time = time.Time{}
+		return nil
+	}
+	switch v := value.(type) {
+	case time.Time:
+		t.Time = v
+		return nil
+	case []byte:
+		return t.parseString(string(v))
+	case string:
+		return t.parseString(v)
+	}
+	return fmt.Errorf("TanggalDate: tidak bisa scan tipe %T", value)
+}
+
+// Value implement driver.Valuer — dipanggil GORM saat write ke DB
+func (t TanggalDate) Value() (driver.Value, error) {
+	if t.IsZero() {
+		return nil, nil
+	}
+	return t.Format("2006-01-02"), nil
+}
+
+func (t *TanggalDate) parseString(s string) error {
+	s = strings.TrimSpace(s)
+	if s == "" || s == "null" {
+		t.Time = time.Time{}
+		return nil
+	}
+	for _, layout := range []string{
+		"2006-01-02",
+		"2006-01-02 15:04:05",
+		time.RFC3339,
+		"2006-01-02T15:04:05Z07:00",
+	} {
+		if parsed, err := time.Parse(layout, s); err == nil {
+			t.Time = parsed
+			return nil
+		}
+	}
+	return fmt.Errorf("TanggalDate: format tidak dikenal: %s", s)
 }
 
 func (t TanggalDate) MarshalJSON() ([]byte, error) {
@@ -20,18 +69,7 @@ func (t TanggalDate) MarshalJSON() ([]byte, error) {
 
 func (t *TanggalDate) UnmarshalJSON(data []byte) error {
 	s := strings.Trim(string(data), `"`)
-	if s == "null" || s == "" {
-		return nil
-	}
-	// Support: "2026-06-12", "2026-06-12T00:00:00+07:00", "2026-06-12T00:00:00Z"
-	for _, layout := range []string{"2006-01-02", time.RFC3339, "2006-01-02T15:04:05Z07:00"} {
-		parsed, err := time.Parse(layout, s)
-		if err == nil {
-			t.Time = parsed
-			return nil
-		}
-	}
-	return nil
+	return t.parseString(s)
 }
 
 // LaporanPertandingan memetakan tabel laporan_pertandingan.

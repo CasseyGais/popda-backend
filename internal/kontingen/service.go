@@ -60,3 +60,9 @@ func (s *Service) CreateKontingen(kontingen *Kontingen) error {
 func (s *Service) UpdateKontingen(id uint, kontingen *Kontingen) error {
 	return s.repo.UpdateKontingen(id, kontingen)
 }
+
+// ResetTahap reset status satu tahap kontingen ke DRAFT.
+// Dipanggil dari handler endpoint POST /admin/tahap{1,2,3}/reset.
+func (s *Service) ResetTahap(kontingenID uint, tahap int) error {
+	return s.repo.ResetTahap(kontingenID, tahap)
+}

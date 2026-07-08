@@ -1,11 +1,22 @@
 package sertifikat
 
 import (
+	"bytes"
+	"encoding/base64"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/jung-kurt/gofpdf"
 )
+
+// TTDSertifikat berisi data satu penandatangan untuk sertifikat PDF
+type TTDSertifikat struct {
+	Jabatan      string `json:"jabatan"`
+	NamaTercetak string `json:"nama_tercetak"`
+	NIP          string `json:"nip"`
+	SignatureB64 string `json:"signature_b64"` // base64 PNG dari signature pad
+}
 
 // SertifikatPDFData berisi semua data yang diperlukan untuk generate satu lembar sertifikat.
 type SertifikatPDFData struct {
@@ -15,6 +26,8 @@ type SertifikatPDFData struct {
 	TipePenerima    string // ATLET / PELATIH / OFFICIAL
 	TanggalTerbit   string // YYYY-MM-DD
 	Catatan         string // opsional
+	// Penandatangan — opsional, jika kosong tampilkan garis kosong
+	Penandatangan []TTDSertifikat
 }
 
 // GenerateSertifikatPDF membuat PDF landscape satu halaman per sertifikat.
@@ -169,57 +182,16 @@ func GenerateSertifikatPDF(items []SertifikatPDFData) ([]byte, error) {
 			y += 6
 		}
 
-		// ===== TANGGAL & TEMPAT =====
+		// ===== BLOK TANDA TANGAN =====
 		tanggalFormatted := formatTanggal(item.TanggalTerbit)
 		y += 2
 		pdf.SetFont("Arial", "", 10)
 		pdf.SetTextColor(60, 60, 60)
 		pdf.SetXY(marginL, y)
 		pdf.CellFormat(usableW, 6, "Serang, "+tanggalFormatted, "", 1, "C", false, 0, "")
-		y += 12
+		y += 3
 
-		// ===== BLOK TANDA TANGAN (dua kolom) =====
-		colTTD := usableW / 2
-		xLeft := marginL
-		xRight := marginL + colTTD
-
-		// Kiri — Ketua Pelaksana
-		pdf.SetFont("Arial", "", 9)
-		pdf.SetTextColor(60, 60, 60)
-		pdf.SetXY(xLeft, y)
-		pdf.CellFormat(colTTD, 5, "Ketua Pelaksana,", "", 1, "C", false, 0, "")
-
-		// Kanan — Kepala Dinas Dispora
-		pdf.SetXY(xRight, y)
-		pdf.CellFormat(colTTD, 5, "Kepala Dinas Pemuda dan Olahraga,", "", 1, "C", false, 0, "")
-		y += 18 // ruang tanda tangan
-
-		// Garis tanda tangan kiri
-		pdf.SetDrawColor(80, 80, 80)
-		pdf.SetLineWidth(0.3)
-		pdf.Line(xLeft+10, y, xLeft+colTTD-10, y)
-
-		// Garis tanda tangan kanan
-		pdf.Line(xRight+10, y, xRight+colTTD-10, y)
-		y += 2
-
-		// Nama pejabat (placeholder — bisa dikustomisasi via env/config)
-		pdf.SetFont("Arial", "B", 9)
-		pdf.SetTextColor(20, 20, 20)
-		pdf.SetXY(xLeft, y)
-		pdf.CellFormat(colTTD, 5, "....................................", "", 1, "C", false, 0, "")
-
-		pdf.SetXY(xRight, y)
-		pdf.CellFormat(colTTD, 5, "....................................", "", 1, "C", false, 0, "")
-		y += 5
-
-		pdf.SetFont("Arial", "", 8)
-		pdf.SetTextColor(80, 80, 80)
-		pdf.SetXY(xLeft, y)
-		pdf.CellFormat(colTTD, 5, "NIP. .....................", "", 1, "C", false, 0, "")
-
-		pdf.SetXY(xRight, y)
-		pdf.CellFormat(colTTD, 5, "NIP. .....................", "", 1, "C", false, 0, "")
+		renderTTDSertifikat(pdf, item.Penandatangan, marginL, y, usableW)
 
 		// ===== FOOTER kecil =====
 		pdf.SetFont("Arial", "I", 7)
@@ -237,7 +209,99 @@ func GenerateSertifikatPDF(items []SertifikatPDFData) ([]byte, error) {
 	return w.buf, nil
 }
 
-// formatTanggal konversi "YYYY-MM-DD" ke "DD Bulan YYYY"
+// renderTTDSertifikat render blok tanda tangan di halaman sertifikat landscape.
+// Jika penandatangan kosong, tampilkan 2 kolom placeholder.
+func renderTTDSertifikat(pdf *gofpdf.Fpdf, ttds []TTDSertifikat, marginL, startY, usableW float64) {
+	// Default: 2 kolom placeholder jika tidak ada data penandatangan
+	if len(ttds) == 0 {
+		ttds = []TTDSertifikat{
+			{Jabatan: "Ketua Pelaksana,", NamaTercetak: "..............................", NIP: ""},
+			{Jabatan: "Kepala Dinas Pemuda dan Olahraga,", NamaTercetak: "..............................", NIP: ""},
+		}
+	}
+
+	n := float64(len(ttds))
+	colW := usableW / n
+	sigH := 20.0
+	y := startY
+
+	// Jabatan per kolom
+	pdf.SetFont("Arial", "", 9)
+	pdf.SetTextColor(60, 60, 60)
+	pdf.SetX(marginL)
+	for _, ttd := range ttds {
+		pdf.CellFormat(colW, 5, ttd.Jabatan+",", "", 0, "C", false, 0, "")
+	}
+	pdf.Ln(-1)
+	y += 5
+
+	// Area tanda tangan — embed gambar jika ada, kosong jika tidak
+	for i, ttd := range ttds {
+		xPos := marginL + float64(i)*colW
+		imgX := xPos + colW/2 - 22
+		imgY := y + 1
+
+		if ttd.SignatureB64 != "" {
+			imgData, err := decodeSigB64(ttd.SignatureB64)
+			if err == nil && len(imgData) > 0 {
+				imgName := fmt.Sprintf("sert_sig_%d_%d", i, time.Now().UnixNano())
+				pdf.RegisterImageReader(imgName, "PNG", bytes.NewReader(imgData))
+				pdf.Image(imgName, imgX, imgY, 44, sigH-2, false, "PNG", 0, "")
+			}
+		}
+	}
+	pdf.Ln(sigH)
+
+	// Garis tanda tangan
+	pdf.SetDrawColor(80, 80, 80)
+	pdf.SetLineWidth(0.3)
+	for i := range ttds {
+		x1 := marginL + float64(i)*colW + colW*0.08
+		x2 := marginL + float64(i)*colW + colW*0.92
+		pdf.Line(x1, pdf.GetY(), x2, pdf.GetY())
+	}
+	pdf.Ln(2)
+
+	// Nama tercetak
+	pdf.SetFont("Arial", "B", 9)
+	pdf.SetTextColor(20, 20, 20)
+	pdf.SetX(marginL)
+	for _, ttd := range ttds {
+		pdf.CellFormat(colW, 5, ttd.NamaTercetak, "", 0, "C", false, 0, "")
+	}
+	pdf.Ln(-1)
+
+	// NIP (jika ada salah satu yang punya NIP)
+	hasNIP := false
+	for _, ttd := range ttds {
+		if ttd.NIP != "" {
+			hasNIP = true
+			break
+		}
+	}
+	if hasNIP {
+		pdf.SetFont("Arial", "", 8)
+		pdf.SetTextColor(80, 80, 80)
+		pdf.SetX(marginL)
+		for _, ttd := range ttds {
+			nip := ""
+			if ttd.NIP != "" {
+				nip = "NIP. " + ttd.NIP
+			}
+			pdf.CellFormat(colW, 5, nip, "", 0, "C", false, 0, "")
+		}
+		pdf.Ln(-1)
+	}
+}
+
+// decodeSigB64 decode base64 PNG dari signature pad.
+// Toleran terhadap "data:image/png;base64,..." maupun plain base64.
+func decodeSigB64(b64 string) ([]byte, error) {
+	if idx := strings.Index(b64, ","); idx != -1 {
+		b64 = b64[idx+1:]
+	}
+	return base64.StdEncoding.DecodeString(b64)
+}
 func formatTanggal(s string) string {
 	t, err := time.Parse("2006-01-02", s)
 	if err != nil {

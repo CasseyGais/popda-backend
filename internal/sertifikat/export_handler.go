@@ -10,8 +10,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// GET /admin/sertifikat/:id/export/pdf
-// Generate PDF landscape satu sertifikat berdasarkan ID.
+// ExportPayload adalah body request untuk endpoint export PDF sertifikat.
+// Penandatangan opsional — jika kosong, PDF tampilkan garis tanda tangan kosong.
+type ExportPayload struct {
+	Penandatangan []TTDSertifikat `json:"penandatangan"`
+}
+
+// POST /admin/sertifikat/:id/export/pdf
+// Generate PDF landscape satu sertifikat.
+// Body JSON (opsional): { "penandatangan": [...] }
 func (h *Handler) ExportPDF(c *gin.Context) {
 	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
 	if err != nil {
@@ -19,18 +26,22 @@ func (h *Handler) ExportPDF(c *gin.Context) {
 		return
 	}
 
+	// Body opsional — tidak apa-apa jika kosong
+	var payload ExportPayload
+	_ = c.ShouldBindJSON(&payload)
+
 	data, err := h.service.GetByID(uint(id))
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"success": false, "message": err.Error()})
 		return
 	}
 
-	// Build data untuk PDF
 	item := SertifikatPDFData{
 		NamaPenerima:  data.NamaPenerima,
 		Judul:         data.Judul,
 		TipePenerima:  data.TipePenerima,
 		TanggalTerbit: data.TanggalTerbit,
+		Penandatangan: payload.Penandatangan,
 	}
 	if data.NomorSertifikat != nil {
 		item.NomorSertifikat = *data.NomorSertifikat
@@ -55,12 +66,16 @@ func (h *Handler) ExportPDF(c *gin.Context) {
 	c.Data(http.StatusOK, "application/pdf", pdfBytes)
 }
 
-// GET /admin/sertifikat/export/batch/pdf?tipe=ATLET&atlet_id=4
-// Generate PDF batch — satu file PDF berisi banyak halaman sertifikat.
-// Query params sama dengan GET /admin/sertifikat (filter opsional).
+// POST /admin/sertifikat/export/batch/pdf
+// Generate PDF batch — satu file berisi semua/filtered sertifikat.
+// Body JSON (opsional): { "penandatangan": [...] }
+// Query params filter: tipe, atlet_id, pelatih_id, official_id
 func (h *Handler) ExportBatchPDF(c *gin.Context) {
-	filter := make(map[string]interface{})
+	// Body opsional
+	var payload ExportPayload
+	_ = c.ShouldBindJSON(&payload)
 
+	filter := make(map[string]interface{})
 	if tipe := c.Query("tipe"); tipe != "" {
 		filter["tipe_penerima"] = strings.ToUpper(tipe)
 	}
@@ -97,6 +112,8 @@ func (h *Handler) ExportBatchPDF(c *gin.Context) {
 			Judul:         s.Judul,
 			TipePenerima:  s.TipePenerima,
 			TanggalTerbit: s.TanggalTerbit,
+			// Tanda tangan hanya di halaman terakhir — tidak di setiap halaman saat batch
+			// Pass penandatangan hanya ke item terakhir
 		}
 		if s.NomorSertifikat != nil {
 			item.NomorSertifikat = *s.NomorSertifikat
@@ -105,6 +122,11 @@ func (h *Handler) ExportBatchPDF(c *gin.Context) {
 			item.Catatan = *s.Catatan
 		}
 		items = append(items, item)
+	}
+
+	// Taruh penandatangan hanya di item terakhir
+	if len(payload.Penandatangan) > 0 && len(items) > 0 {
+		items[len(items)-1].Penandatangan = payload.Penandatangan
 	}
 
 	pdfBytes, err := GenerateSertifikatPDF(items)

@@ -180,16 +180,28 @@ type RekapNomor struct {
 
 // RekapAtlet dipakai untuk list atlet di rekap
 type RekapAtlet struct {
-	ID            uint   `gorm:"column:id" json:"id"`
-	NamaLengkap   string `gorm:"column:nama_lengkap" json:"nama_lengkap"`
-	JenisKelamin  string `gorm:"column:jenis_kelamin" json:"jenis_kelamin"`
-	TanggalLahir  string `gorm:"column:tanggal_lahir" json:"tanggal_lahir"`
-	NISN          string `gorm:"column:nisn" json:"nisn"`
-	Sekolah       string `gorm:"column:sekolah" json:"sekolah"`
-	KelasJurusan  string `gorm:"column:kelas_jurusan" json:"kelas_jurusan"`
-	KabupatenKota string `gorm:"column:kabupaten_kota" json:"kabupaten_kota"`
-	NoHP          string `gorm:"column:no_hp" json:"no_hp"`
-	Status        string `gorm:"column:status" json:"status"`
+	ID                         uint   `gorm:"column:id" json:"id"`
+	NamaLengkap                string `gorm:"column:nama_lengkap" json:"nama_lengkap"`
+	JenisKelamin               string `gorm:"column:jenis_kelamin" json:"jenis_kelamin"`
+	TanggalLahir               string `gorm:"column:tanggal_lahir" json:"tanggal_lahir"`
+	TempatLahir                string `gorm:"column:tempat_lahir" json:"tempat_lahir"`
+	NISN                       string `gorm:"column:nisn" json:"nisn"`
+	NIS                        string `gorm:"column:nis" json:"nis"`
+	Sekolah                    string `gorm:"column:sekolah" json:"sekolah"`
+	KelasJurusan               string `gorm:"column:kelas_jurusan" json:"kelas_jurusan"`
+	Alamat                     string `gorm:"column:alamat" json:"alamat"`
+	KabupatenKota              string `gorm:"column:kabupaten_kota" json:"kabupaten_kota"`
+	NoHP                       string `gorm:"column:no_hp" json:"no_hp"`
+	NamaOrtuWali               string `gorm:"column:nama_ortu_wali" json:"nama_ortu_wali"`
+	Status                     string `gorm:"column:status" json:"status"`
+	Foto                       string `gorm:"column:foto" json:"foto"`
+	FileKartuPelajar           string `gorm:"column:file_kartu_pelajar" json:"file_kartu_pelajar"`
+	FileAkteKelahiran          string `gorm:"column:file_akte_kelahiran" json:"file_akte_kelahiran"`
+	FileKK                     string `gorm:"column:file_kk" json:"file_kk"`
+	FileSuratKeteranganSekolah string `gorm:"column:file_surat_keterangan_sekolah" json:"file_surat_keterangan_sekolah"`
+	FileSuratIzinOrtu          string `gorm:"column:file_surat_izin_ortu" json:"file_surat_izin_ortu"`
+	PrestasiSebelumnya         string `gorm:"column:prestasi_sebelumnya" json:"prestasi_sebelumnya"`
+	Catatan                    string `gorm:"column:catatan" json:"catatan"`
 }
 
 // RekapAtletTrx dipakai untuk trx masing-masing atlet di rekap
@@ -205,12 +217,27 @@ type RekapAtletTrx struct {
 
 // RekapPelatih dipakai untuk list pelatih di rekap
 type RekapPelatih struct {
-	ID            uint   `gorm:"column:id" json:"id"`
-	NamaLengkap   string `gorm:"column:nama_lengkap" json:"nama_lengkap"`
-	JenisKelamin  string `gorm:"column:jenis_kelamin" json:"jenis_kelamin"`
-	Jabatan       string `gorm:"column:jabatan" json:"jabatan"`
-	NoHP          string `gorm:"column:no_hp" json:"no_hp"`
-	Status        string `gorm:"column:status" json:"status"`
+	ID                    uint   `gorm:"column:id" json:"id"`
+	NamaLengkap           string `gorm:"column:nama_lengkap" json:"nama_lengkap"`
+	JenisKelamin          string `gorm:"column:jenis_kelamin" json:"jenis_kelamin"`
+	TanggalLahir          string `gorm:"column:tanggal_lahir" json:"tanggal_lahir"`
+	TempatLahir           string `gorm:"column:tempat_lahir" json:"tempat_lahir"`
+	NIK                   string `gorm:"column:nik" json:"nik"`
+	SekolahAsal           string `gorm:"column:sekolah_asal" json:"sekolah_asal"`
+	Profesi               string `gorm:"column:profesi" json:"profesi"`
+	Jabatan               string `gorm:"column:jabatan" json:"jabatan"`
+	Alamat                string `gorm:"column:alamat" json:"alamat"`
+	KabupatenKota         string `gorm:"column:kabupaten_kota" json:"kabupaten_kota"`
+	NoHP                  string `gorm:"column:no_hp" json:"no_hp"`
+	Email                 string `gorm:"column:email" json:"email"`
+	NamaIstriSuami        string `gorm:"column:nama_istri_suami" json:"nama_istri_suami"`
+	Status                string `gorm:"column:status" json:"status"`
+	Foto                  string `gorm:"column:foto" json:"foto"`
+	FileKTP               string `gorm:"column:file_ktp" json:"file_ktp"`
+	FileSuratTugas        string `gorm:"column:file_surat_tugas" json:"file_surat_tugas"`
+	FileSertifikatPelatih string `gorm:"column:file_sertifikat_pelatih" json:"file_sertifikat_pelatih"`
+	PrestasiSebelumnya    string `gorm:"column:prestasi_sebelumnya" json:"prestasi_sebelumnya"`
+	Catatan               string `gorm:"column:catatan" json:"catatan"`
 }
 
 // RekapPelatihTrx dipakai untuk trx masing-masing pelatih di rekap
@@ -225,9 +252,20 @@ type RekapOfficial struct {
 	ID            uint   `gorm:"column:id" json:"id"`
 	NamaLengkap   string `gorm:"column:nama_lengkap" json:"nama_lengkap"`
 	JenisKelamin  string `gorm:"column:jenis_kelamin" json:"jenis_kelamin"`
+	TanggalLahir  string `gorm:"column:tanggal_lahir" json:"tanggal_lahir"`
+	TempatLahir   string `gorm:"column:tempat_lahir" json:"tempat_lahir"`
+	NIK           string `gorm:"column:nik" json:"nik"`
+	SekolahAsal   string `gorm:"column:sekolah_asal" json:"sekolah_asal"`
 	Jabatan       string `gorm:"column:jabatan" json:"jabatan"`
+	Alamat        string `gorm:"column:alamat" json:"alamat"`
+	KabupatenKota string `gorm:"column:kabupaten_kota" json:"kabupaten_kota"`
 	NoHP          string `gorm:"column:no_hp" json:"no_hp"`
+	Email         string `gorm:"column:email" json:"email"`
 	Status        string `gorm:"column:status" json:"status"`
+	Foto          string `gorm:"column:foto" json:"foto"`
+	FileKTP       string `gorm:"column:file_ktp" json:"file_ktp"`
+	FileSuratTugas string `gorm:"column:file_surat_tugas" json:"file_surat_tugas"`
+	Catatan       string `gorm:"column:catatan" json:"catatan"`
 }
 
 // GetRekap ambil semua data pendaftaran kontingen untuk halaman Rekap Pendaftaran.
@@ -273,7 +311,12 @@ func (r *Repository) GetRekap(kontingenID uint) (map[string]interface{}, error) 
 	// 4. Atlet
 	var atletList []RekapAtlet
 	r.db.Table("master_atlet").
-		Select("id, nama_lengkap, jenis_kelamin, tanggal_lahir, nisn, sekolah, kelas_jurusan, kabupaten_kota, no_hp, status").
+		Select(`id, nama_lengkap, jenis_kelamin, tanggal_lahir, tempat_lahir,
+			nisn, nis, sekolah, kelas_jurusan, alamat, kabupaten_kota, no_hp,
+			nama_ortu_wali, status, foto,
+			file_kartu_pelajar, file_akte_kelahiran, file_kk,
+			file_surat_keterangan_sekolah, file_surat_izin_ortu,
+			prestasi_sebelumnya, catatan`).
 		Where("kontingen_id = ?", kontingenID).
 		Order("nama_lengkap ASC").
 		Scan(&atletList)
@@ -302,24 +345,40 @@ func (r *Repository) GetRekap(kontingenID uint) (map[string]interface{}, error) 
 			trx = []RekapAtletTrx{}
 		}
 		atletsWithTrx = append(atletsWithTrx, map[string]interface{}{
-			"id":             a.ID,
-			"nama_lengkap":   a.NamaLengkap,
-			"jenis_kelamin":  a.JenisKelamin,
-			"tanggal_lahir":  a.TanggalLahir,
-			"nisn":           a.NISN,
-			"sekolah":        a.Sekolah,
-			"kelas_jurusan":  a.KelasJurusan,
-			"kabupaten_kota": a.KabupatenKota,
-			"no_hp":          a.NoHP,
-			"status":         a.Status,
-			"trx":            trx,
+			"id":                           a.ID,
+			"nama_lengkap":                 a.NamaLengkap,
+			"jenis_kelamin":                a.JenisKelamin,
+			"tanggal_lahir":                a.TanggalLahir,
+			"tempat_lahir":                 a.TempatLahir,
+			"nisn":                         a.NISN,
+			"nis":                          a.NIS,
+			"sekolah":                      a.Sekolah,
+			"kelas_jurusan":                a.KelasJurusan,
+			"alamat":                       a.Alamat,
+			"kabupaten_kota":               a.KabupatenKota,
+			"no_hp":                        a.NoHP,
+			"nama_ortu_wali":               a.NamaOrtuWali,
+			"status":                       a.Status,
+			"foto":                         a.Foto,
+			"file_kartu_pelajar":           a.FileKartuPelajar,
+			"file_akte_kelahiran":          a.FileAkteKelahiran,
+			"file_kk":                      a.FileKK,
+			"file_surat_keterangan_sekolah": a.FileSuratKeteranganSekolah,
+			"file_surat_izin_ortu":         a.FileSuratIzinOrtu,
+			"prestasi_sebelumnya":          a.PrestasiSebelumnya,
+			"catatan":                      a.Catatan,
+			"trx":                          trx,
 		})
 	}
 
 	// 5. Pelatih
 	var pelatihList []RekapPelatih
 	r.db.Table("master_pelatih").
-		Select("id, nama_lengkap, jenis_kelamin, jabatan, no_hp, status").
+		Select(`id, nama_lengkap, jenis_kelamin, tanggal_lahir, tempat_lahir,
+			nik, sekolah_asal, profesi, jabatan, alamat, kabupaten_kota, no_hp,
+			email, nama_istri_suami, status, foto,
+			file_ktp, file_surat_tugas, file_sertifikat_pelatih,
+			prestasi_sebelumnya, catatan`).
 		Where("kontingen_id = ?", kontingenID).
 		Order("nama_lengkap ASC").
 		Scan(&pelatihList)
@@ -344,20 +403,37 @@ func (r *Repository) GetRekap(kontingenID uint) (map[string]interface{}, error) 
 			trx = []RekapPelatihTrx{}
 		}
 		pelatihsWithTrx = append(pelatihsWithTrx, map[string]interface{}{
-			"id":            p.ID,
-			"nama_lengkap":  p.NamaLengkap,
-			"jenis_kelamin": p.JenisKelamin,
-			"jabatan":       p.Jabatan,
-			"no_hp":         p.NoHP,
-			"status":        p.Status,
-			"trx":           trx,
+			"id":                     p.ID,
+			"nama_lengkap":           p.NamaLengkap,
+			"jenis_kelamin":          p.JenisKelamin,
+			"tanggal_lahir":          p.TanggalLahir,
+			"tempat_lahir":           p.TempatLahir,
+			"nik":                    p.NIK,
+			"sekolah_asal":           p.SekolahAsal,
+			"profesi":                p.Profesi,
+			"jabatan":                p.Jabatan,
+			"alamat":                 p.Alamat,
+			"kabupaten_kota":         p.KabupatenKota,
+			"no_hp":                  p.NoHP,
+			"email":                  p.Email,
+			"nama_istri_suami":       p.NamaIstriSuami,
+			"status":                 p.Status,
+			"foto":                   p.Foto,
+			"file_ktp":               p.FileKTP,
+			"file_surat_tugas":       p.FileSuratTugas,
+			"file_sertifikat_pelatih": p.FileSertifikatPelatih,
+			"prestasi_sebelumnya":    p.PrestasiSebelumnya,
+			"catatan":                p.Catatan,
+			"trx":                    trx,
 		})
 	}
 
 	// 6. Official
 	var officialList []RekapOfficial
 	r.db.Table("master_official").
-		Select("id, nama_lengkap, jenis_kelamin, jabatan, no_hp, status").
+		Select(`id, nama_lengkap, jenis_kelamin, tanggal_lahir, tempat_lahir,
+			nik, sekolah_asal, jabatan, alamat, kabupaten_kota, no_hp,
+			email, status, foto, file_ktp, file_surat_tugas, catatan`).
 		Where("kontingen_id = ?", kontingenID).
 		Order("nama_lengkap ASC").
 		Scan(&officialList)
@@ -387,13 +463,24 @@ func (r *Repository) GetRekap(kontingenID uint) (map[string]interface{}, error) 
 			trx = []map[string]interface{}{}
 		}
 		officialsWithTrx = append(officialsWithTrx, map[string]interface{}{
-			"id":            o.ID,
-			"nama_lengkap":  o.NamaLengkap,
-			"jenis_kelamin": o.JenisKelamin,
-			"jabatan":       o.Jabatan,
-			"no_hp":         o.NoHP,
-			"status":        o.Status,
-			"trx":           trx,
+			"id":              o.ID,
+			"nama_lengkap":    o.NamaLengkap,
+			"jenis_kelamin":   o.JenisKelamin,
+			"tanggal_lahir":   o.TanggalLahir,
+			"tempat_lahir":    o.TempatLahir,
+			"nik":             o.NIK,
+			"sekolah_asal":    o.SekolahAsal,
+			"jabatan":         o.Jabatan,
+			"alamat":          o.Alamat,
+			"kabupaten_kota":  o.KabupatenKota,
+			"no_hp":           o.NoHP,
+			"email":           o.Email,
+			"status":          o.Status,
+			"foto":            o.Foto,
+			"file_ktp":        o.FileKTP,
+			"file_surat_tugas": o.FileSuratTugas,
+			"catatan":         o.Catatan,
+			"trx":             trx,
 		})
 	}
 

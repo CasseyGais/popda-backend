@@ -155,3 +155,44 @@ func (r *Repository) UpdateKontingen(id uint, kontingen *Kontingen) error {
 		Where("id = ?", id).
 		Updates(updates).Error
 }
+
+// ResetTahap mereset status satu tahap kontingen ke DRAFT dan mengosongkan
+// field submitted_at, validasi_status, validasi_catatan, dan validasi_at.
+// tahap harus 1, 2, atau 3.
+func (r *Repository) ResetTahap(kontingenID uint, tahap int) error {
+	var updates map[string]interface{}
+
+	switch tahap {
+	case 1:
+		updates = map[string]interface{}{
+			"tahap1_status":           "DRAFT",
+			"tahap1_submitted_at":     nil,
+			"tahap1_validasi_status":  nil,
+			"tahap1_validasi_catatan": nil,
+			"tahap1_validasi_at":      nil,
+		}
+	case 2:
+		updates = map[string]interface{}{
+			"tahap2_status":           "DRAFT",
+			"tahap2_submitted_at":     nil,
+			"tahap2_validasi_status":  nil,
+			"tahap2_validasi_catatan": nil,
+			"tahap2_validasi_at":      nil,
+		}
+	case 3:
+		updates = map[string]interface{}{
+			"tahap3_status":           "DRAFT",
+			"tahap3_submitted_at":     nil,
+			"tahap3_validasi_status":  nil,
+			"tahap3_validasi_catatan": nil,
+			"tahap3_validasi_at":      nil,
+		}
+	default:
+		return fmt.Errorf("tahap tidak valid: %d", tahap)
+	}
+
+	return r.db.
+		Model(&Kontingen{}).
+		Where("id = ?", kontingenID).
+		Updates(updates).Error
+}

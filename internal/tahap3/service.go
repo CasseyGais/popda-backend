@@ -373,6 +373,11 @@ func (s *Service) GetNomorTerdaftar(kontingenID uint) ([]NomorTerdaftar, error) 
 	return s.repo.GetNomorTerdaftar(kontingenID)
 }
 
+// GetStatistikAtlet hitung total atlet dari seluruh kontingen.
+func (s *Service) GetStatistikAtlet() (map[string]interface{}, error) {
+	return s.repo.GetStatistikAtlet()
+}
+
 // ===== EXPORT =====
 
 // GetExportData menyiapkan semua data untuk export tahap 3 (atlet + pelatih + official)

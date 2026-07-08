@@ -220,6 +220,7 @@ func main() {
 		admin.PUT("/tahap1", middleware.TahapOpen(db.DB, 1), tahap1Handler.Update)
 		admin.DELETE("/tahap1/:cabor_id", middleware.TahapOpen(db.DB, 1), tahap1Handler.DeleteCabor)
 		admin.POST("/tahap1/submit", middleware.TahapOpen(db.DB, 1), tahap1Handler.Submit)
+		admin.POST("/tahap1/reset", middleware.SuperadminOnly(), kontingenHandler.ResetTahap1)
 		admin.GET("/tahap1/export/pdf", tahap1Handler.ExportPDF)
 		admin.GET("/tahap1/export/excel", tahap1Handler.ExportExcel)
 
@@ -227,11 +228,13 @@ func main() {
 		admin.POST("/tahap2/nomor/:nomor_id", middleware.TahapOpen(db.DB, 2), tahap2Handler.DaftarNomor)
 		admin.DELETE("/tahap2/nomor/:nomor_id", middleware.TahapOpen(db.DB, 2), tahap2Handler.BatalNomor)
 		admin.POST("/tahap2/submit", middleware.TahapOpen(db.DB, 2), tahap2Handler.Submit)
+		admin.POST("/tahap2/reset", middleware.SuperadminOnly(), kontingenHandler.ResetTahap2)
 		admin.GET("/tahap2/export/pdf", tahap2Handler.ExportPDF)
 		admin.GET("/tahap2/export/excel", tahap2Handler.ExportExcel)
 
 		admin.GET("/tahap3", tahap3Handler.Get)
 		admin.POST("/tahap3/submit", middleware.TahapOpen(db.DB, 3), tahap3Handler.Submit)
+		admin.POST("/tahap3/reset", middleware.SuperadminOnly(), kontingenHandler.ResetTahap3)
 
 		// Tahap 3 — Export (statis, harus SEBELUM route /:id dan sub-resource)
 		admin.GET("/tahap3/export/pdf", tahap3Handler.ExportPDF)
@@ -240,6 +243,9 @@ func main() {
 		// Tahap 3 — Referensi dari tahap sebelumnya (statis, sebelum /:id)
 		admin.GET("/tahap3/cabor", tahap3Handler.GetCaborTerpilih)
 		admin.GET("/tahap3/nomor", tahap3Handler.GetNomorTerdaftar)
+
+		// Tahap 3 — Statistik atlet seluruh kontingen
+		admin.GET("/tahap3/statistik/atlet", tahap3Handler.GetStatistikAtlet)
 
 		// Tahap 3 — Atlet (statis dulu, baru param)
 		admin.GET("/tahap3/atlet", tahap3Handler.GetAtlets)
@@ -468,18 +474,18 @@ func main() {
 		// PENTING: route statis harus SEBELUM route param (/:id)
 		admin.GET("/sertifikat", middleware.RolesAllowed("SUPERADMIN", "STAFF_LAPANGAN"), sertifikatHandler.GetAll)
 		admin.POST("/sertifikat", middleware.RolesAllowed("SUPERADMIN", "STAFF_LAPANGAN"), sertifikatHandler.Create)
-		// Export batch (statis, sebelum /:id)
-		admin.GET("/sertifikat/export/batch/pdf", middleware.RolesAllowed("SUPERADMIN", "STAFF_LAPANGAN"), sertifikatHandler.ExportBatchPDF)
+		// Export batch (statis, sebelum /:id) — POST agar bisa terima body tanda tangan
+		admin.POST("/sertifikat/export/batch/pdf", middleware.RolesAllowed("SUPERADMIN", "STAFF_LAPANGAN"), sertifikatHandler.ExportBatchPDF)
 		// Dropdown penerima (statis, sebelum /:id)
 		admin.GET("/sertifikat/penerima/atlet", middleware.RolesAllowed("SUPERADMIN", "STAFF_LAPANGAN"), sertifikatHandler.GetAtletDropdown)
 		admin.GET("/sertifikat/penerima/pelatih", middleware.RolesAllowed("SUPERADMIN", "STAFF_LAPANGAN"), sertifikatHandler.GetPelatihDropdown)
 		admin.GET("/sertifikat/penerima/official", middleware.RolesAllowed("SUPERADMIN", "STAFF_LAPANGAN"), sertifikatHandler.GetOfficialDropdown)
-		// CRUD + export per ID
+		// CRUD + export per ID — export pakai POST agar bisa terima body tanda tangan
 		admin.GET("/sertifikat/:id", middleware.RolesAllowed("SUPERADMIN", "STAFF_LAPANGAN"), sertifikatHandler.GetByID)
 		admin.PUT("/sertifikat/:id", middleware.RolesAllowed("SUPERADMIN", "STAFF_LAPANGAN"), sertifikatHandler.Update)
 		admin.DELETE("/sertifikat/:id", middleware.RolesAllowed("SUPERADMIN", "STAFF_LAPANGAN"), sertifikatHandler.Delete)
 		admin.PUT("/sertifikat/:id/file", middleware.RolesAllowed("SUPERADMIN", "STAFF_LAPANGAN"), sertifikatHandler.UploadFile)
-		admin.GET("/sertifikat/:id/export/pdf", middleware.RolesAllowed("SUPERADMIN", "STAFF_LAPANGAN"), sertifikatHandler.ExportPDF)
+		admin.POST("/sertifikat/:id/export/pdf", middleware.RolesAllowed("SUPERADMIN", "STAFF_LAPANGAN"), sertifikatHandler.ExportPDF)
 	}
 
 	log.Println("🚀 Starting server...")

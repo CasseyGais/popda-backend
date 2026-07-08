@@ -307,6 +307,21 @@ func (r *Repository) BulkInsertTrxOfficials(kontingenID uint) error {
 	return r.db.Create(&records).Error
 }
 
+// ===== STATISTIK ATLET =====
+
+// ===== STATISTIK ATLET =====
+
+// GetStatistikAtlet hitung total seluruh atlet dari semua kontingen.
+func (r *Repository) GetStatistikAtlet() (map[string]interface{}, error) {
+	var total int64
+	if err := r.db.Table("master_atlet").Count(&total).Error; err != nil {
+		return nil, err
+	}
+	return map[string]interface{}{
+		"total_atlet": total,
+	}, nil
+}
+
 // ===== REFERENCE DATA — cabor & nomor yang dipilih kontingen =====
 
 // CaborTerpilih adalah cabor yang dipilih kontingen di tahap 1

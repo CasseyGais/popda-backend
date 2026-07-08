@@ -1,8 +1,13 @@
 package users
 
 import (
+	"fmt"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strconv"
+	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -183,20 +188,69 @@ func (h *Handler) UpdateAvatar(c *gin.Context) {
 		return
 	}
 
-	var request struct {
-		Avatar string `json:"avatar" binding:"required"`
-	}
-	if err := c.ShouldBindJSON(&request); err != nil {
+	// Ambil file dari form-data
+	file, err := c.FormFile("avatar")
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"success": false,
-			"message": "Format request tidak valid",
-			"error":   err.Error(),
+			"message": "Field 'avatar' wajib diisi",
 		})
 		return
 	}
 
-	err = h.service.UpdateAvatar(uint(id), request.Avatar)
+	// Validasi tipe file
+	allowedTypes := map[string]bool{
+		"image/jpeg": true,
+		"image/png":  true,
+		"image/webp": true,
+		"image/gif":  true,
+	}
+	contentType := file.Header.Get("Content-Type")
+	if !allowedTypes[contentType] {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"success": false,
+			"message": "File harus berupa gambar (jpeg, png, webp)",
+		})
+		return
+	}
+
+	// Validasi ukuran (maks 2 MB)
+	const maxSize = 2 * 1024 * 1024
+	if file.Size > maxSize {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"success": false,
+			"message": "Ukuran file maksimal 2 MB",
+		})
+		return
+	}
+
+	// Cek user ada, sekaligus ambil avatar lama untuk dihapus nanti
+	existingUser, err := h.service.GetByID(uint(id))
 	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"success": false,
+			"message": "User tidak ditemukan",
+		})
+		return
+	}
+
+	// Simpan file baru ke uploads/avatar/
+	ext := filepath.Ext(file.Filename)
+	filename := fmt.Sprintf("%d_avatar%s", time.Now().UnixNano(), ext)
+	savePath := filepath.Join("uploads", "avatar", filename)
+
+	if err := c.SaveUploadedFile(file, savePath); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "Gagal menyimpan file",
+		})
+		return
+	}
+
+	avatarPath := "/uploads/avatar/" + filename
+
+	// Update kolom avatar di DB
+	if err := h.service.UpdateAvatar(uint(id), avatarPath); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"success": false,
 			"message": err.Error(),
@@ -204,9 +258,19 @@ func (h *Handler) UpdateAvatar(c *gin.Context) {
 		return
 	}
 
+	// Hapus file avatar lama jika ada dan bukan file statis bawaan
+	if existingUser.Avatar != "" &&
+		strings.HasPrefix(existingUser.Avatar, "/uploads/avatar/") {
+		oldPath := strings.TrimPrefix(existingUser.Avatar, "/")
+		_ = os.Remove(oldPath) // abaikan error jika file tidak ada
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
-		"message": "Avatar user berhasil diupdate",
+		"message": "Avatar berhasil diperbarui",
+		"data": gin.H{
+			"avatar": avatarPath,
+		},
 	})
 }
 
