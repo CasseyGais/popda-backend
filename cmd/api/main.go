@@ -54,17 +54,18 @@ func main() {
 	r.Use(cors.New(cors.Config{
 		AllowOrigins: []string{
 			"http://localhost:5173",
+			"http://localhost:3000",
 			"http://localhost:8000",
 			"http://127.0.0.1:8000",
 			"https://popda-frontend-production.up.railway.app",
 		},
 		AllowMethods: []string{
-			"GET", "POST", "PUT", "DELETE", "OPTIONS",
+			"GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS",
 		},
 		AllowHeaders: []string{
-			"Origin", "Content-Type", "Authorization",
+			"Origin", "Content-Type", "Authorization", "Accept",
 		},
-		AllowCredentials: true,
+		AllowCredentials: false,
 		MaxAge:           12 * time.Hour,
 	}))
 
